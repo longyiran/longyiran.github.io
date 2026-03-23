@@ -32,9 +32,6 @@
     const { useState, useEffect } = React;
 
     // --- 项目数据中心 ---
-    // 💡 提示：在这里修改你的作品详情！
-    // logo: 你的logo图片路径 (例如 './images/logo-1.png')。如果没有logo，删掉这一行或者留空即可。
-    // detailText: 你的项目详细介绍，可以使用简单的文字。
     const projects = [
       { 
         id: 1, title: '符号回廊', subtitle: 'SIGNLESS', category: 'Game', year: '2024', tags: ['游戏设计', '独立游戏'], 
@@ -51,7 +48,7 @@
       { 
         id: 3, title: '可栖居的美术馆', subtitle: 'CO-LIVING MUSEUM', category: 'Display', year: '2025', tags: ['展示设计', '空间设计'], 
         image: './images/3.jpg',
-        logo: './images/logo-3.png'
+        logo: './images/logo-3.png', // 修复：这里补上了逗号
         detailText: '展示空间设计项目。打破传统美术馆“观看与被观看”的二元对立，创造一个观众可以真正“栖居”、互动、并成为艺术一部分的新型展示空间。'
       },
       { id: 4, title: 'TryTrail动物审判', subtitle: 'ANIMAL TRIAL', category: 'Game', year: '2024', tags: ['游戏设计', '解谜'], image: './images/4.jpg', logo: './images/logo-4.png', detailText: '解谜类游戏设计项目。探索规则、逻辑与视觉传达的边界。' },
@@ -88,7 +85,6 @@
       const [filter, setFilter] = useState('All');
       const [isFilterOpen, setIsFilterOpen] = useState(false);
       
-      // 新增：用于记录当前选中的项目，null表示在首页
       const [selectedProject, setSelectedProject] = useState(null);
 
       const filteredProjects = filter === 'All' 
@@ -104,7 +100,6 @@
     # 0          R          4       4
       `;
 
-      // 每次切换页面时，自动滚动到顶部
       useEffect(() => {
         window.scrollTo(0, 0);
       }, [selectedProject]);
@@ -113,7 +108,6 @@
       if (selectedProject) {
         return (
           <div className="min-h-screen font-mono selection:bg-white selection:text-black relative bg-[#050505] z-50">
-            {/* 顶部导航与返回按钮 */}
             <header className="w-full p-6 md:p-8 flex justify-between items-start z-40">
               <button 
                 onClick={() => setSelectedProject(null)}
@@ -130,10 +124,8 @@
             <main className="px-4 md:px-12 max-w-[1400px] mx-auto pb-32 pt-12">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
                 
-                {/* 左侧：文字信息与 Logo */}
                 <div className="lg:col-span-4 flex flex-col items-start order-2 lg:order-1">
                   
-                  {/* 如果该项目有Logo，则显示在这里 */}
                   {selectedProject.logo && (
                     <img 
                       src={selectedProject.logo} 
@@ -159,6 +151,214 @@
                     <div className="text-xs uppercase text-zinc-300">{selectedProject.tags.join(' / ')}</div>
                   </div>
 
-                  {/* 详细描述 */}
                   <div className="text-zinc-400 text-sm leading-relaxed font-sans text-justify">
                     {selectedProject.detailText || "System Note: No detailed description provided for this project yet."}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-8 order-1 lg:order-2">
+                  <div className="w-full bg-[#111] border border-zinc-800 relative p-2">
+                    <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-500"></div>
+                    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-500"></div>
+                    <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-500"></div>
+                    <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-500"></div>
+                    
+                    <img 
+                      src={selectedProject.image} 
+                      alt={selectedProject.title} 
+                      className="w-full h-auto object-cover opacity-90"
+                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                    />
+                    <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0">
+                      <span className="text-zinc-600 text-sm tracking-widest opacity-50">
+                        [IMG: {selectedProject.title}]
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </main>
+          </div>
+        );
+      }
+
+      // ========== 视图 A：主页列表 (Main Portfolio View) ==========
+      return (
+        <div className="min-h-screen font-mono selection:bg-white selection:text-black relative overflow-x-hidden">
+          
+          <header className="fixed top-0 w-full p-6 md:p-8 flex justify-between items-start z-40 pointer-events-none">
+            <div className="font-sans font-black text-3xl md:text-5xl tracking-tighter uppercase pointer-events-auto mix-blend-difference">
+              Lorraine<span className="text-zinc-500">_</span>
+            </div>
+            <div className="text-right text-[10px] md:text-xs text-zinc-400 uppercase leading-relaxed hidden sm:flex flex-col items-end pointer-events-auto mix-blend-difference">
+              <div>DISPLAY & GAME DESIGN</div>
+              <div>INFO@LORRAINE.DESIGN</div>
+              <a href="#about" className="mt-2 border-b border-zinc-600 hover:text-white hover:border-white transition-colors cursor-pointer">
+                [ VIEW PROFILE ]
+              </a>
+            </div>
+          </header>
+
+          <div className="fixed top-1/4 right-[10%] text-xs text-zinc-600 pointer-events-none mix-blend-difference">03</div>
+          <div className="fixed top-2/3 left-[5%] text-xs text-zinc-600 pointer-events-none mix-blend-difference">02</div>
+
+          <main className="pt-32 pb-32 px-4 md:px-12 max-w-[1800px] mx-auto z-10 relative min-h-screen">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-16">
+              {filteredProjects.map((project, index) => (
+                <article 
+                  key={project.id} 
+                  onClick={() => setSelectedProject(project)} 
+                  className={`mb-24 md:mb-0 project-card cursor-pointer group ${
+                    index % 2 === 1 ? 'md:mt-[30vh]' : 'md:mb-[15vh]'
+                  }`}
+                >
+                  <div className="relative">
+                    <div className="img-container w-full aspect-[4/3] bg-[#111] overflow-hidden relative border border-zinc-800 group-hover:border-zinc-400 transition-colors duration-300">
+                      <div className="absolute top-4 left-4 text-xs font-mono text-white/50 z-20 mix-blend-difference drop-shadow-md">
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 z-10"
+                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                      />
+                      <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0">
+                        <span className="text-zinc-600 text-sm tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">
+                          [IMG: {project.title}]
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-col items-start">
+                      <h2 className="font-sans font-black text-2xl md:text-3xl uppercase tracking-tight text-white mb-1 group-hover:text-zinc-300 transition-colors">
+                        {project.title}
+                      </h2>
+                      <div className="text-[10px] md:text-xs text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                        <span>{project.subtitle}</span>
+                        <span>•</span>
+                        <span>{project.year}</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">
+                        {project.category.toUpperCase()} / {project.tags.join(' ')}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </main>
+
+          <section id="about" className="px-4 md:px-12 max-w-[1800px] mx-auto pb-48 pt-24 z-10 relative bg-[#050505]">
+            <div className="mb-16 border-t border-white pt-4">
+              <div className="flex justify-between items-end">
+                <h2 className="font-sans font-black text-4xl md:text-6xl tracking-tighter uppercase">
+                  Profile<span className="text-zinc-600">_Data</span>
+                </h2>
+                <div className="text-xs text-zinc-500 hidden md:block">:/ ID: 2022011870</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-16">
+              <div className="space-y-12">
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">01 // EDUCATION & AFFILIATION</h3>
+                  {resumeData.education.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">02 // SOCIAL & CREATIVE EXPERIENCE</h3>
+                  {resumeData.experience.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group border-b border-zinc-900 pb-4">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-12">
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">03 // AWARDS & HONORS</h3>
+                  {resumeData.awards.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group border-b border-zinc-900 pb-4">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">04 // ACADEMIC RESEARCH</h3>
+                  {resumeData.research.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group border-b border-zinc-900 pb-4">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="fixed bottom-6 left-6 z-50 w-[240px] md:w-[280px] shadow-2xl">
+            {isFilterOpen && (
+              <div className="bg-[#111] border border-zinc-800 border-b-0 text-zinc-300 text-xs uppercase p-2">
+                {['All', 'Game', 'Display', 'Product'].map((cat) => (
+                  <div 
+                    key={cat}
+                    onClick={() => { setFilter(cat); setIsFilterOpen(false); }}
+                    className={`py-2 px-2 cursor-pointer hover:bg-white hover:text-black transition-colors ${filter === cat ? 'text-white font-bold' : ''}`}
+                  >
+                    {cat === 'All' ? 'SHOW ALL WORKS' : `FILTER: ${cat.toUpperCase()}`}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div>
+              <button 
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="w-full bg-white text-black p-3 flex justify-between items-center text-xs font-bold uppercase hover:bg-zinc-200 transition-colors"
+              >
+                <span>{filter === 'All' ? 'ALL WORKS' : filter.toUpperCase()}</span>
+                <span className="text-lg leading-none">{isFilterOpen ? '-' : '+'}</span>
+              </button>
+              <div className="bg-[#888] text-black px-3 py-1 text-[10px] flex justify-between items-center uppercase font-bold tracking-widest">
+                <span>:/FILTERS</span>
+                <span>{filteredProjects.length} PROJECTS</span>
+              </div>
+            </div>
+          </div>
+
+          <pre className="absolute bottom-12 left-1/4 text-[8px] md:text-[10px] text-zinc-600 opacity-50 pointer-events-none whitespace-pre leading-[1.2]">
+            {asciiArt}
+          </pre>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
