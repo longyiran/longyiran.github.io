@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lorraine Long_ | Portfolio</title>
+  
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background-color: #050505;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+      background-size: 14px 14px;
+      color: white;
+    }
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    .project-card:hover .img-container { transform: scale(0.98); }
+    .img-container { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // --- 项目数据：注意这里的 image 路径指向了 images 文件夹 ---
+    const projects = [
+      { id: 1, title: '符号回廊', subtitle: 'SIGNLESS', category: 'Game', year: '2023', tags: ['游戏设计', '独立游戏'], image: './images/1.jpg' },
+      { id: 2, title: '终点站最后的钟声', subtitle: 'LAST BELL', category: 'Game', year: '2023', tags: ['游戏设计', '剧情向'], image: './images/2.jpg' },
+      { id: 3, title: '可栖居的美术馆', subtitle: 'CO-LIVING MUSEUM', category: 'Display', year: '2024', tags: ['展示设计', '空间设计'], image: './images/3.jpg' },
+      { id: 4, title: 'TryTrail动物审判', subtitle: 'ANIMAL TRIAL', category: 'Game', year: '2024', tags: ['游戏设计', '解谜'], image: './images/4.jpg' },
+      { id: 5, title: 'Time&Memory', subtitle: 'VR EXPERIENCE', category: 'Game', year: '2024', tags: ['VR游戏', '艺术物料'], image: './images/5.jpg' },
+      { id: 6, title: 'Jokull', subtitle: 'ECO TOY', category: 'Product', year: '2025', tags: ['产品设计', '木制环保玩具'], image: './images/6.jpg' },
+      { id: 7, title: '点滴霖霪', subtitle: 'INTERACTIVE ART', category: 'Product', year: '2025', tags: ['装置艺术', '交互装置'], image: './images/7.jpg' },
+      { id: 8, title: '白舟映梦', subtitle: 'STAGE DESIGN', category: 'Product', year: '2025', tags: ['舞美设计', '哲学戏剧节'], image: './images/8.jpg' },
+      { id: 9, title: 'airescue', subtitle: 'FLYING CAR', category: 'Product', year: '2026', tags: ['产品设计', '飞行汽车'], image: './images/9.jpg' },
+    ];
+
+    const resumeData = {
+      education: [
+        { year: '2022.08 - PRESENT', title: '清华大学 TSINGHUA UNIVERSITY', desc: '美术学院 / 艺术与科技 (展示设计)' }
+      ],
+      awards: [
+        { year: '2025.04', title: 'MUSE DESIGN AWARDS', desc: '队长 / SILVER WINNER (GAMING, AR & VR / INTERACTION / STUDENT DESIGN)' },
+        { year: '2025.03', title: '2025 G-CROSS 跨界艺术创意奖', desc: '队长 / 铜奖 BRONZE' },
+        { year: '2024.05', title: '2024 雀巢 CEO 挑战赛', desc: '队长 / 清华赛区一等奖; 全国赛区三等奖' }
+      ],
+      research: [
+        { year: '2025.09 - PRESENT', title: '展示策划中的游戏化设计研究', desc: '学术科研' },
+        { year: '2025.04 - PRESENT', title: '展示叙事艺术中内容物料呈现的游戏化研究', desc: '大学生学术研究推进计划 B级' },
+        { year: '2023.09 - 2025.05', title: '可生物降解材料创新研究与设计应用', desc: '学术科研' }
+      ],
+      experience: [
+        { year: '2025.03 - PRESENT', title: '未来交互学生科创兴趣团队', desc: '理事长 PRESIDENT' },
+        { year: '2024.12', title: '哲学戏剧节《风的雾月玫瑰日》', desc: '原创剧目舞美装置设计 STAGE DESIGN' },
+        { year: '2023.07 - PRESENT', title: '校团委组织部团代会组', desc: '干事' },
+        { year: '2023.10 - 2024.10', title: '清华大学艺术博物馆', desc: '志愿者 VOLUNTEER' }
+      ]
+    };
+
+    function App() {
+      const [filter, setFilter] = useState('All');
+      const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+      const filteredProjects = filter === 'All' 
+        ? projects 
+        : projects.filter(p => p.category === filter);
+
+      const asciiArt = `
+  + * .  # & @ * . +  * @      04
+  . @ R R 4 4 4 4 . #     *
+    R R R 4 . . @ .
+  * . 4 4 R @ . * +
+      R     R T %    R   4  44   4      4
+    # 0          R          4       4
+      `;
+
+      return (
+        <div className="min-h-screen font-mono selection:bg-white selection:text-black relative overflow-x-hidden">
+          
+          <header className="fixed top-0 w-full p-6 md:p-8 flex justify-between items-start z-40 pointer-events-none">
+            <div className="font-sans font-black text-3xl md:text-5xl tracking-tighter uppercase pointer-events-auto mix-blend-difference">
+              Lorraine<span className="text-zinc-500">_</span>
+            </div>
+            <div className="text-right text-[10px] md:text-xs text-zinc-400 uppercase leading-relaxed hidden sm:flex flex-col items-end pointer-events-auto mix-blend-difference">
+              <div>DISPLAY & GAME DESIGN</div>
+              <div>INFO@LORRAINE.DESIGN</div>
+              <a href="#about" className="mt-2 border-b border-zinc-600 hover:text-white hover:border-white transition-colors cursor-pointer">
+                [ VIEW PROFILE ]
+              </a>
+            </div>
+          </header>
+
+          <div className="fixed top-1/4 right-[10%] text-xs text-zinc-600 pointer-events-none mix-blend-difference">03</div>
+          <div className="fixed top-2/3 left-[5%] text-xs text-zinc-600 pointer-events-none mix-blend-difference">02</div>
+
+          <main className="pt-32 pb-32 px-4 md:px-12 max-w-[1800px] mx-auto z-10 relative min-h-screen">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-16">
+              {filteredProjects.map((project, index) => (
+                <article 
+                  key={project.id} 
+                  className={`mb-24 md:mb-0 project-card cursor-pointer group ${
+                    index % 2 === 1 ? 'md:mt-[30vh]' : 'md:mb-[15vh]'
+                  }`}
+                >
+                  <div className="relative">
+                    <div className="img-container w-full aspect-[4/3] bg-[#111] overflow-hidden relative border border-zinc-800 group-hover:border-zinc-400 transition-colors duration-300">
+                      <div className="absolute top-4 left-4 text-xs font-mono text-white/50 z-20 mix-blend-difference drop-shadow-md">
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      
+                      {/* --- 真实图片显示区域 --- */}
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 z-10"
+                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                      />
+                      {/* --- 如果图片找不到，显示占位符 --- */}
+                      <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0">
+                        <span className="text-zinc-600 text-sm tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">
+                          [IMG: {project.title}]
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-col items-start">
+                      <h2 className="font-sans font-black text-2xl md:text-3xl uppercase tracking-tight text-white mb-1 group-hover:text-zinc-300 transition-colors">
+                        {project.title}
+                      </h2>
+                      <div className="text-[10px] md:text-xs text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                        <span>{project.subtitle}</span>
+                        <span>•</span>
+                        <span>{project.year}</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">
+                        {project.category.toUpperCase()} / {project.tags.join(' ')}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </main>
+
+          <section id="about" className="px-4 md:px-12 max-w-[1800px] mx-auto pb-48 pt-24 z-10 relative bg-[#050505]">
+            <div className="mb-16 border-t border-white pt-4">
+              <div className="flex justify-between items-end">
+                <h2 className="font-sans font-black text-4xl md:text-6xl tracking-tighter uppercase">
+                  Profile<span className="text-zinc-600">_Data</span>
+                </h2>
+                <div className="text-xs text-zinc-500 hidden md:block">:/ ID: 2022011870</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-16">
+              <div className="space-y-12">
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">01 // EDUCATION & AFFILIATION</h3>
+                  {resumeData.education.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">02 // SOCIAL & CREATIVE EXPERIENCE</h3>
+                  {resumeData.experience.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group border-b border-zinc-900 pb-4">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-12">
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">03 // AWARDS & HONORS</h3>
+                  {resumeData.awards.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group border-b border-zinc-900 pb-4">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <h3 className="text-zinc-500 text-[10px] tracking-widest mb-4 border-b border-zinc-800 pb-2">04 // ACADEMIC RESEARCH</h3>
+                  {resumeData.research.map((item, i) => (
+                    <div key={i} className="mb-4 flex flex-col md:flex-row md:gap-8 group border-b border-zinc-900 pb-4">
+                      <div className="text-zinc-500 text-xs w-32 shrink-0 mb-1 md:mb-0 transition-colors group-hover:text-white">{item.year}</div>
+                      <div>
+                        <div className="text-sm font-bold text-white mb-1">{item.title}</div>
+                        <div className="text-xs text-zinc-400">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="fixed bottom-6 left-6 z-50 w-[240px] md:w-[280px] shadow-2xl">
+            {isFilterOpen && (
+              <div className="bg-[#111] border border-zinc-800 border-b-0 text-zinc-300 text-xs uppercase p-2">
+                {['All', 'Game', 'Display', 'Product'].map((cat) => (
+                  <div 
+                    key={cat}
+                    onClick={() => { setFilter(cat); setIsFilterOpen(false); }}
+                    className={`py-2 px-2 cursor-pointer hover:bg-white hover:text-black transition-colors ${filter === cat ? 'text-white font-bold' : ''}`}
+                  >
+                    {cat === 'All' ? 'SHOW ALL WORKS' : `FILTER: ${cat.toUpperCase()}`}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div>
+              <button 
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="w-full bg-white text-black p-3 flex justify-between items-center text-xs font-bold uppercase hover:bg-zinc-200 transition-colors"
+              >
+                <span>{filter === 'All' ? 'ALL WORKS' : filter.toUpperCase()}</span>
+                <span className="text-lg leading-none">{isFilterOpen ? '-' : '+'}</span>
+              </button>
+              <div className="bg-[#888] text-black px-3 py-1 text-[10px] flex justify-between items-center uppercase font-bold tracking-widest">
+                <span>:/FILTERS</span>
+                <span>{filteredProjects.length} PROJECTS</span>
+              </div>
+            </div>
+          </div>
+
+          <pre className="absolute bottom-12 left-1/4 text-[8px] md:text-[10px] text-zinc-600 opacity-50 pointer-events-none whitespace-pre leading-[1.2]">
+            {asciiArt}
+          </pre>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
