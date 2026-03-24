@@ -21,6 +21,10 @@
       color: white;
     }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
+    /* 隐藏特定区域的滚动条 */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
     .project-card:hover .img-container { transform: scale(0.98); }
     .img-container { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
   </style>
@@ -32,10 +36,9 @@
     const { useState, useEffect, useRef } = React;
 
     // --- 项目数据中心 ---
-    // 💡 在这里绑定你的视频 (video: './images/x.mp4')
     const projects = [
       { 
-        id: 1, title: '符号回廊', subtitle: 'SIGNLESS', category: 'Game', year: '2024', tags: ['游戏设计', '独立游戏'], 
+        id: 1, title: '符号回廊', subtitle: 'SIGNLESS', category: '交互游戏', year: '2024', tags: ['游戏设计', '独立游戏'], 
         image: './images/1.jpg', 
         logo: './images/logo-1.png', 
         detailText: '《符号回廊》是一款基于虚拟现实技术的多人叙事体验游戏，它源自对数字时代交流异化的深刻反思。在当下，表情符号和简化的文字已成为情感表达的代名词，而身体本身丰富的语义潜力却在逐渐消退。该项目构建了一个无限的符号宇宙，灵感源自博尔赫斯的《巴别图书馆》。\n\n在游戏中，玩家彼此间成为隐形的“符号旅行者”。在这里，交流回归到其最根本的身体维度：通过仪式性的手势在环境中生成、替换和丢弃符号，玩家以异步、跨时间的方式共同改写世界的语义和叙事结构。这不仅仅是一款游戏，更是一场思想实验：当既定的符号系统失效时，我们的身体动作能否再次成为意义的源泉，在虚拟空间中谱写新的连接与理解的诗篇？',
@@ -43,37 +46,50 @@
         processImage: './images/process-1.jpg'
       },
       { 
-        id: 2, title: '终点站最后的钟声', subtitle: 'LAST BELL', category: 'Game', year: '2025', tags: ['游戏设计', '剧情向'], 
+        id: 2, title: '终点站最后的钟声', subtitle: 'LAST BELL', category: '交互游戏', year: '2025', tags: ['游戏设计', '剧情向'], 
         image: './images/2.jpg',
         logo: './images/logo-2.png',
-        video: './images/2.mp4', // <--- 添加了视频
+        video: './images/2.mp4', 
         detailText: '剧情向游戏设计。探讨时间、终点与告别的主题。在系统设计上采用了多线叙事结构，玩家的每一个选择都将改变虚拟空间中的物料呈现形式。'
       },
       { 
-        id: 3, title: '可栖居的美术馆', subtitle: 'CO-LIVING MUSEUM', category: 'Display', year: '2025', tags: ['展示设计', '空间设计'], 
+        id: 3, title: '可栖居的美术馆', subtitle: 'CO-LIVING MUSEUM', category: '展示设计', year: '2025', tags: ['展示设计', '空间设计'], 
         image: './images/3.jpg',
         logo: './images/logo-3.png',
-        video: './images/3.mp4',
+        video: './images/3.mp4', 
         detailText: '展示空间设计项目。打破传统美术馆“观看与被观看”的二元对立，创造一个观众可以真正“栖居”、互动、并成为艺术一部分的新型展示空间。'
       },
-      { id: 4, title: 'TryTrail动物审判', subtitle: 'ANIMAL TRIAL', category: 'Game', year: '2024', tags: ['游戏设计', '解谜'], image: './images/4.jpg', logo: './images/logo-4.png', detailText: '解谜类游戏设计项目。探索规则、逻辑与视觉传达的边界。' },
+      { id: 4, title: 'TryTrail动物审判', subtitle: 'ANIMAL TRIAL', category: '交互游戏', year: '2024', tags: ['游戏设计', '解谜'], image: './images/4.jpg', logo: './images/logo-4.png', detailText: '解谜类游戏设计项目。探索规则、逻辑与视觉传达的边界。' },
       { 
-        id: 5, title: 'Time&Memory', subtitle: 'VR EXPERIENCE', category: 'Game', year: '2024', tags: ['VR游戏', '艺术物料'], 
+        id: 5, title: 'Time&Memory', subtitle: 'VR EXPERIENCE', category: '交互游戏', year: '2024', tags: ['VR游戏', '艺术物料'], 
         image: './images/5.jpg', 
         logo: './images/logo-5.png', 
-        video: './images/5.mp4', // <--- 添加了视频
+        video: './images/5.mp4', 
         detailText: 'VR虚拟现实体验。探索时间与记忆的流体形态，通过虚拟现实设备打破物理空间的限制。' 
       },
-      { id: 6, title: 'Jokull', subtitle: 'ECO TOY', category: 'Product', year: '2025', tags: ['产品设计', '木制环保玩具'], image: './images/6.jpg', logo: './images/logo-6.png', detailText: '木制环保科普玩具设计，旨在通过可持续的材料和巧妙的机械结构，向使用者传递环保理念与物理知识。' },
+      { id: 6, title: 'Jokull', subtitle: 'ECO TOY', category: 'Other Works', year: '2025', tags: ['产品设计', '木制环保玩具'], image: './images/6.jpg', logo: './images/logo-6.png', detailText: '木制环保科普玩具设计，旨在通过可持续的材料和巧妙的机械结构，向使用者传递环保理念与物理知识。' },
       { 
-        id: 7, title: '点滴霖霪', subtitle: 'INTERACTIVE ART', category: 'Product', year: '2024', tags: ['装置艺术', '交互装置'], 
+        id: 7, title: '点滴霖霪', subtitle: 'INTERACTIVE ART', category: 'Other Works', year: '2024', tags: ['装置艺术', '交互装置'], 
         image: './images/7.jpg', 
-        logo: './images/logo-7.png', // 假设你有logo，如果有请上传 logo-7.png，没有可删去
-        video: './images/7.mp4', // <--- 添加了视频
+        logo: './images/logo-7.png', 
+        video: './images/7.mp4', 
         detailText: '交互艺术装置设计。探讨人、水与环境之间的微妙反馈关系。' 
       },
-      { id: 8, title: '白舟映梦', subtitle: 'STAGE DESIGN', category: 'Product', year: '2024', tags: ['舞美设计', '哲学戏剧节'], image: './images/8.jpg', detailText: '为哲学戏剧节《风的雾月玫瑰日》设计的原创舞美装置，强调整体舞台的叙事性与沉浸感。' },
-      { id: 9, title: 'airescue', subtitle: 'FLYING CAR', category: 'Product', year: '2024', tags: ['产品设计', '飞行汽车'], image: './images/9.jpg', detailText: '面向未来的概念飞行汽车设计项目，探讨未来城市三维交通的可能性与产品美学。' },
+      { id: 8, title: '白舟映梦', subtitle: 'STAGE DESIGN', category: 'Other Works', year: '2024', tags: ['舞美设计', '哲学戏剧节'], image: './images/8.jpg', detailText: '为哲学戏剧节《风的雾月玫瑰日》设计的原创舞美装置，强调整体舞台的叙事性与沉浸感。' },
+      { id: 9, title: 'airescue', subtitle: 'FLYING CAR', category: 'Other Works', year: '2024', tags: ['产品设计', '飞行汽车'], image: './images/9.jpg', detailText: '面向未来的概念飞行汽车设计项目，探讨未来城市三维交通的可能性与产品美学。' },
+      { 
+        id: 10, title: '蹈迹生路', subtitle: 'PATH OF DEVELOPMENT', category: '展示设计', year: '2024', tags: ['展示设计', '展览策划'], 
+        image: './images/10.jpg', 
+        logo: './images/logo-10.png', 
+        detailText: '《蹈迹生路——中国道路发展展》展示设计。通过空间叙事与展陈布局，回顾并展望中国道路的发展历程，打造沉浸式的历史与未来对话空间。' 
+      },
+      { 
+        id: 11, title: '星辰漫游道', subtitle: 'GYM RENOVATION', category: '展示设计', year: '2024', tags: ['展示设计', '空间改造'], 
+        image: './images/11.jpg', 
+        logo: './images/logo-11.png', 
+        video: './images/11.mp4', 
+        detailText: '清华东操体育馆改造项目。以“星辰漫游道”为概念核心，通过重新规划体育馆的动线与交互空间，为日常运动赋予宇宙漫游般的视觉与身体双重体验。' 
+      }
     ];
 
     const resumeData = {
@@ -99,34 +115,30 @@
     };
 
     // ==========================================
-    // 核心组件：项目卡片 (处理复杂的Logo与视频动画)
+    // 核心组件：项目卡片
     // ==========================================
     function ProjectCard({ project, index, onClick }) {
       const [isHovered, setIsHovered] = useState(false);
       const [showVideo, setShowVideo] = useState(false);
       const videoRef = useRef(null);
 
-      // 动画与视频播放控制逻辑
       useEffect(() => {
         let timer;
         if (isHovered && project.video) {
-          // 预备播放视频 (防浏览器报错拦截)
           if (videoRef.current) {
             videoRef.current.play().catch(() => {}); 
           }
-          // 1.2秒后，logo消失，视频浮现
           timer = setTimeout(() => {
             setShowVideo(true);
           }, 1200);
         } else {
-          // 鼠标移出，立刻重置状态
           setShowVideo(false);
           if (videoRef.current) {
             videoRef.current.pause();
-            videoRef.current.currentTime = 0; // 重置视频进度
+            videoRef.current.currentTime = 0; 
           }
         }
-        return () => clearTimeout(timer); // 清除计时器
+        return () => clearTimeout(timer);
       }, [isHovered, project.video]);
 
       return (
@@ -141,17 +153,14 @@
           <div className="relative">
             <div className="img-container w-full aspect-[4/3] bg-[#111] overflow-hidden relative border border-zinc-800 group-hover:border-zinc-400 transition-colors duration-300">
               
-              {/* 左上角编号 */}
               <div className="absolute top-4 left-4 text-xs font-mono text-white/50 z-40 mix-blend-difference drop-shadow-md">
                 {String(index + 1).padStart(2, '0')}
               </div>
               
-              {/* 深色遮罩层：悬浮时出现，为Logo和视频增加高级感 */}
               {(project.logo || project.video) && (
                 <div className="absolute inset-0 bg-black/60 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
               )}
 
-              {/* 动态视频层：仅在拥有视频且延迟时间到达后浮现 */}
               {project.video && (
                 <video
                   ref={videoRef}
@@ -163,7 +172,6 @@
                 />
               )}
 
-              {/* 交互Logo层：如果有视频且开始放视频了，Logo就隐藏；否则悬浮时显示 */}
               {project.logo && (
                 <div className={`absolute inset-0 flex items-center justify-center z-30 transition-all duration-700 pointer-events-none
                   ${isHovered && !showVideo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
@@ -172,12 +180,11 @@
                     src={project.logo} 
                     alt={`${project.title} Logo`}
                     className="w-1/2 max-h-[50%] object-contain filter drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]"
-                    onerror="this.style.display='none'"
+                    onError={(e) => e.target.style.display='none'}
                   />
                 </div>
               )}
 
-              {/* 底部底层静态图 */}
               <img 
                 src={project.image} 
                 alt={project.title} 
@@ -185,7 +192,6 @@
                 onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
               />
               
-              {/* 容错占位符 */}
               <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0">
                 <span className="text-zinc-600 text-sm tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">
                   [IMG: {project.title}]
@@ -193,7 +199,6 @@
               </div>
             </div>
 
-            {/* 文本信息 */}
             <div className="mt-4 flex flex-col items-start">
               <h2 className="font-sans font-black text-2xl md:text-3xl uppercase tracking-tight text-white mb-1 group-hover:text-zinc-300 transition-colors">
                 {project.title}
@@ -217,8 +222,9 @@
     // ==========================================
     function App() {
       const [filter, setFilter] = useState('All');
-      const [isFilterOpen, setIsFilterOpen] = useState(false);
       const [selectedProject, setSelectedProject] = useState(null);
+      const [isDetailMuted, setIsDetailMuted] = useState(true);
+      const detailVideoRef = useRef(null);
 
       const filteredProjects = filter === 'All' 
         ? projects 
@@ -235,7 +241,14 @@
 
       useEffect(() => {
         window.scrollTo(0, 0);
+        setIsDetailMuted(true);
       }, [selectedProject]);
+
+      useEffect(() => {
+        if (detailVideoRef.current) {
+          detailVideoRef.current.muted = isDetailMuted;
+        }
+      }, [isDetailMuted, selectedProject]);
 
       // ========== 视图 B：项目详情页 ==========
       if (selectedProject) {
@@ -320,9 +333,31 @@
                     <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-500"></div>
                     <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-500"></div>
                     
-                    {/* 在详情页中，如果有视频也支持展示（也可以只放静态图，这里统一展示主视觉） */}
                     {selectedProject.video ? (
-                      <video src={selectedProject.video} autoPlay loop muted playsInline className="w-full h-auto object-cover opacity-90" />
+                      <div className="flex flex-col">
+                        <video 
+                          ref={detailVideoRef}
+                          src={selectedProject.video} 
+                          autoPlay 
+                          loop 
+                          muted 
+                          playsInline 
+                          className="w-full h-auto object-cover opacity-90" 
+                        />
+                        <div className="flex justify-between items-center mt-3 pt-3 border-t border-zinc-800">
+                          <div className="text-[10px] text-zinc-600 tracking-widest">:/ MEDIA_PLAYER</div>
+                          <button 
+                            onClick={() => setIsDetailMuted(!isDetailMuted)}
+                            className={`text-[10px] font-bold tracking-widest border px-3 py-1 transition-all ${
+                              isDetailMuted 
+                                ? 'border-zinc-700 text-zinc-400 hover:text-white hover:border-white' 
+                                : 'bg-white text-black border-white'
+                            }`}
+                          >
+                            {isDetailMuted ? 'SOUND: OFF [UNMUTE]' : 'SOUND: ON [MUTE]'}
+                          </button>
+                        </div>
+                      </div>
                     ) : (
                       <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-auto object-cover opacity-90" />
                     )}
@@ -356,8 +391,30 @@
           <div className="fixed top-2/3 left-[5%] text-xs text-zinc-600 pointer-events-none mix-blend-difference">02</div>
 
           <main className="pt-32 pb-32 px-4 md:px-12 max-w-[1800px] mx-auto z-10 relative min-h-screen">
+            
+            {/* --- 新增：巨型视觉分类导航（一眼就明白） --- */}
+            <div className="mb-16 md:mb-24 flex flex-col md:flex-row items-start md:items-end gap-4 md:gap-12 border-b border-zinc-800 pb-8">
+              <div className="text-zinc-600 text-[10px] md:text-xs font-mono tracking-widest uppercase mb-2 md:mb-0 w-24 shrink-0">
+                :/ DIRECTORY
+              </div>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 md:gap-x-12">
+                {['All', '展示设计', '交互游戏', 'Other Works'].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setFilter(cat)}
+                    className={`font-sans font-black text-2xl md:text-5xl uppercase tracking-tighter transition-all duration-300 ${
+                      filter === cat 
+                        ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]' 
+                        : 'text-zinc-800 hover:text-zinc-400'
+                    }`}
+                  >
+                    {cat === 'All' ? 'ALL WORKS' : cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-16">
-              {/* 这里调用我们刚才封装的组件 */}
               {filteredProjects.map((project, index) => (
                 <ProjectCard 
                   key={project.id} 
@@ -368,6 +425,27 @@
               ))}
             </div>
           </main>
+
+          {/* --- 新增：常驻底部终端控制面板 (取消了折叠逻辑，永远显示) --- */}
+          <div className="fixed bottom-0 left-0 w-full md:bottom-6 md:left-6 z-50 md:w-[240px] shadow-2xl bg-[#050505]/95 backdrop-blur border-t md:border border-zinc-800">
+            <div className="hidden md:flex bg-zinc-200 text-black px-3 py-2 text-[10px] justify-between items-center uppercase font-bold tracking-widest">
+              <span>:/ FILTERS</span>
+              <span>{filteredProjects.length} PROJECTS</span>
+            </div>
+            <div className="flex flex-row md:flex-col font-mono text-[10px] md:text-xs uppercase overflow-x-auto w-full hide-scrollbar">
+              {['All', '展示设计', '交互游戏', 'Other Works'].map((cat) => (
+                <button 
+                  key={cat}
+                  onClick={() => { setFilter(cat); window.scrollTo(0,0); }}
+                  className={`flex-shrink-0 py-4 md:py-3 px-6 md:px-4 text-center md:text-left border-r md:border-r-0 md:border-t border-zinc-800 transition-colors whitespace-nowrap ${
+                    filter === cat ? 'bg-white text-black font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+                  }`}
+                >
+                  {cat === 'All' ? 'SHOW ALL WORKS' : cat}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <section id="about" className="px-4 md:px-12 max-w-[1800px] mx-auto pb-48 pt-24 z-10 relative bg-[#050505]">
             <div className="mb-16 border-t border-white pt-4">
@@ -437,35 +515,6 @@
               </div>
             </div>
           </section>
-
-          <div className="fixed bottom-6 left-6 z-50 w-[240px] md:w-[280px] shadow-2xl">
-            {isFilterOpen && (
-              <div className="bg-[#111] border border-zinc-800 border-b-0 text-zinc-300 text-xs uppercase p-2">
-                {['All', 'Game', 'Display', 'Product'].map((cat) => (
-                  <div 
-                    key={cat}
-                    onClick={() => { setFilter(cat); setIsFilterOpen(false); }}
-                    className={`py-2 px-2 cursor-pointer hover:bg-white hover:text-black transition-colors ${filter === cat ? 'text-white font-bold' : ''}`}
-                  >
-                    {cat === 'All' ? 'SHOW ALL WORKS' : `FILTER: ${cat.toUpperCase()}`}
-                  </div>
-                ))}
-              </div>
-            )}
-            <div>
-              <button 
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="w-full bg-white text-black p-3 flex justify-between items-center text-xs font-bold uppercase hover:bg-zinc-200 transition-colors"
-              >
-                <span>{filter === 'All' ? 'ALL WORKS' : filter.toUpperCase()}</span>
-                <span className="text-lg leading-none">{isFilterOpen ? '-' : '+'}</span>
-              </button>
-              <div className="bg-[#888] text-black px-3 py-1 text-[10px] flex justify-between items-center uppercase font-bold tracking-widest">
-                <span>:/FILTERS</span>
-                <span>{filteredProjects.length} PROJECTS</span>
-              </div>
-            </div>
-          </div>
 
           <pre className="absolute bottom-12 left-1/4 text-[8px] md:text-[10px] text-zinc-600 opacity-50 pointer-events-none whitespace-pre leading-[1.2]">
             {asciiArt}
