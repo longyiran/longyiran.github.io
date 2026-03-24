@@ -71,6 +71,7 @@
       { 
         id: 7, title: '点滴霖霪', subtitle: 'INTERACTIVE ART', category: 'Other Works', year: '2024', tags: ['装置艺术', '交互装置'], 
         image: './images/7.jpg', 
+        logo: './images/logo-7.png', 
         video: './images/7.mp4', 
         detailText: '交互艺术装置设计。探讨人、水与环境之间的微妙反馈关系。' 
       },
@@ -79,6 +80,7 @@
       { 
         id: 10, title: '蹈迹生路', subtitle: 'PATH OF DEVELOPMENT', category: '展示设计', year: '2024', tags: ['展示设计', '展览策划'], 
         image: './images/10.jpg', 
+        logo: './images/logo-10.png', 
         detailText: '《蹈迹生路——中国道路发展展》展示设计。通过空间叙事与展陈布局，回顾并展望中国道路的发展历程，打造沉浸式的历史与未来对话空间。' 
       },
       { 
@@ -303,25 +305,6 @@
                       {selectedProject.detailTextEn}
                     </div>
                   )}
-
-                  {selectedProject.processImage && (
-                    <div className="mt-12 w-full">
-                      <div className="text-[10px] text-zinc-600 mb-4 tracking-widest uppercase">:/ CONCEPT & PROCESS</div>
-                      <div className="w-full aspect-[32/9] bg-[#111] border border-zinc-800 relative p-1">
-                        <img 
-                          src={selectedProject.processImage} 
-                          alt="Concept and Process" 
-                          className="w-full h-full object-cover opacity-90 grayscale hover:grayscale-0 transition-all duration-700"
-                          onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                        />
-                        <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0">
-                          <span className="text-zinc-600 text-sm tracking-widest opacity-50 font-mono">
-                            [IMG_REQ: 32:9_CONCEPT]
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 <div className="lg:col-span-8 order-1 lg:order-2">
@@ -359,8 +342,28 @@
                     ) : (
                       <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-auto object-cover opacity-90" />
                     )}
-                    
                   </div>
+
+                  {/* --- 灵感思路图：移到了右侧区域，位于主媒体的正下方 --- */}
+                  {selectedProject.processImage && (
+                    <div className="mt-12 md:mt-20 w-full">
+                      <div className="text-[10px] text-zinc-600 mb-4 tracking-widest uppercase border-b border-zinc-800 pb-2">:/ CONCEPT & PROCESS</div>
+                      <div className="w-full aspect-[32/9] bg-[#111] border border-zinc-800 relative p-1">
+                        <img 
+                          src={selectedProject.processImage} 
+                          alt="Concept and Process" 
+                          className="w-full h-full object-cover opacity-90 grayscale hover:grayscale-0 transition-all duration-700"
+                          onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                        />
+                        <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0">
+                          <span className="text-zinc-600 text-sm tracking-widest opacity-50 font-mono">
+                            [IMG_REQ: 32:9_CONCEPT]
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                 </div>
               </div>
             </main>
