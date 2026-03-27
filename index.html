@@ -48,6 +48,49 @@
         extraSections: [
           { id: 'p1', type: 'image', title: 'CONCEPT & INSPIRATION', image: './images/process-1.jpg', scrollable: false },
           { id: 'r1', type: 'image', title: 'RESEARCH & FLOWCHART', image: './images/signless-research.jpg', scrollable: false },
+          
+          // 💡 新增：交互式拆解流程图 (点按切换)
+          {
+            id: 'flow1',
+            type: 'interactive-flow',
+            title: 'GAMEPLAY LOGIC EXPLORATION',
+            steps: [
+              { 
+                id: 's1', 
+                title: '01 / 动作即符号', 
+                icon: '⚚', 
+                image: './images/flow-1.jpg', 
+                desc: '玩家进入新手区域（阿莱夫记忆库），首次尝试用身体动作（如推、捏、挥动）生成对应的视觉符号，完成基础语义系统的学习。' 
+              },
+              { 
+                id: 's2', 
+                title: '02 / 场景解谜', 
+                icon: '◩', 
+                image: './images/flow-2.jpg', 
+                desc: '进入探索循环：在温室花园、迷雾空间等区域，利用前置生成的符号改变地形状态，寻找散落的线索与碎片。' 
+              },
+              { 
+                id: 's3', 
+                title: '03 / 暗黑模式', 
+                icon: '👁', 
+                image: './images/flow-3.jpg', 
+                desc: '当倒计时结束或触发特定行为，世界异化进入暗黑模式。“言灵”开始追捕，若玩家被捕获，将被冻结于时间回廊。',
+                // 💡 新增：暗黑模式专属的悬浮资产小图
+                assets: [
+                  { src: './images/yanling-render.png', alt: 'ENTITY_RENDER' },
+                  { src: './images/yanling-process.png', alt: 'DEV_SCREENSHOT' }
+                ]
+              },
+              { 
+                id: 's4', 
+                title: '04 / 异步营救', 
+                icon: '⋈', 
+                image: './images/flow-4.jpg', 
+                desc: '幸存的玩家必须解读被困者留下的“符号残像”，准确还原其动作逻辑，完成跨时空的协作营救，最终补全空白之书。' 
+              }
+            ]
+          },
+
           { 
             id: 'm1', 
             type: 'scene-map', 
@@ -289,6 +332,95 @@
     }
 
     // ==========================================
+    // 💡 新增：交互式拆解流程图组件
+    // ==========================================
+    function InteractiveFlow({ section }) {
+      const [activeStep, setActiveStep] = useState(0);
+
+      return (
+        <div className="mt-12 md:mt-20 w-full relative z-10">
+          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
+            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
+            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse">
+              [ CLICK TO INTERACT ]
+            </div>
+          </div>
+
+          <div className="w-full bg-[#111] border border-zinc-800 p-1 flex flex-col shadow-2xl">
+            
+            {/* 上方：节点导航区 */}
+            <div className="flex flex-wrap md:flex-nowrap border-b border-zinc-800">
+              {section.steps.map((step, idx) => (
+                <button
+                  key={step.id}
+                  onClick={() => setActiveStep(idx)}
+                  className={`flex-1 p-3 md:p-4 flex flex-col items-center justify-center border-r border-zinc-800 last:border-r-0 transition-all cursor-pointer ${
+                    activeStep === idx 
+                      ? 'bg-cyan-900/30 text-cyan-400' 
+                      : 'bg-black text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
+                  }`}
+                >
+                  <span className="text-xl mb-2 font-serif">{step.icon}</span>
+                  <span className="text-[10px] font-mono tracking-widest text-center">{step.title}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* 下方：动态展示区 */}
+            <div className="relative w-full aspect-[4/3] md:aspect-[21/9] bg-[#050505] overflow-hidden flex flex-col md:flex-row">
+                <div className="w-full md:w-2/3 h-1/2 md:h-full relative p-2 md:p-6 flex items-center justify-center">
+                    <img
+                        src={section.steps[activeStep].image}
+                        className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-700"
+                        alt={section.steps[activeStep].title}
+                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                    />
+                    <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
+                        <span>[IMG_NOT_FOUND]</span>
+                        <span>REQ: {section.steps[activeStep].image}</span>
+                    </div>
+
+                    {/* 💡 新增：渲染该步骤专属的悬浮资产 (如暗黑模式的言灵图)，带警告色调特效 */}
+                    {section.steps[activeStep].assets && (
+                      <div className="absolute top-2 right-2 md:top-6 md:right-6 flex flex-col gap-2 md:gap-4 pointer-events-none z-20">
+                        {section.steps[activeStep].assets.map((asset, idx) => (
+                          <div key={idx} className="bg-black/80 backdrop-blur-md border border-red-900/60 p-1.5 md:p-2 shadow-[0_0_20px_rgba(220,38,38,0.15)] animate-in slide-in-from-right fade-in duration-500" style={{ animationDelay: `${idx * 150}ms` }}>
+                            <div className="text-[8px] md:text-[10px] text-red-500 font-mono mb-1 tracking-widest uppercase flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+                              :/ {asset.alt}
+                            </div>
+                            <img 
+                              src={asset.src} 
+                              alt={asset.alt} 
+                              className="w-24 md:w-32 h-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.3)]" 
+                              onError={(e) => { e.target.parentElement.style.display='none'; }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                </div>
+                <div className="w-full md:w-1/3 h-1/2 md:h-full border-t md:border-t-0 md:border-l border-zinc-800 p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
+                    <div className="text-cyan-500 text-[10px] font-mono mb-2 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-cyan-500 animate-pulse"></span>
+                        :/ PHASE_0{activeStep + 1}
+                    </div>
+                    <h4 className="text-white text-lg md:text-xl font-bold mb-4 uppercase tracking-tighter">
+                        {section.steps[activeStep].title}
+                    </h4>
+                    <p className="text-zinc-400 text-xs leading-relaxed text-justify">
+                        {section.steps[activeStep].desc}
+                    </p>
+                </div>
+            </div>
+            
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
     // 核心组件：项目卡片
     // ==========================================
     function ProjectCard({ project, index, onClick }) {
@@ -399,7 +531,6 @@
       const [selectedProject, setSelectedProject] = useState(null);
       const [isDetailMuted, setIsDetailMuted] = useState(true);
       
-      // 💡 改进的数据结构：包含当前场景、全部场景列表和当前索引，以便于实现左右翻页
       const [activeSceneModal, setActiveSceneModal] = useState(null); 
       const [hoveredSceneBg, setHoveredSceneBg] = useState(null);
       
@@ -435,9 +566,8 @@
       if (selectedProject) {
         return (
           <div className={`min-h-screen font-mono selection:bg-white selection:text-black relative z-50 transition-colors duration-1000 ${hoveredSceneBg ? 'bg-transparent' : 'bg-[#050505]'}`}>
-            <CustomCursor /> {/* 详情页注入光标 */}
-
-            {/* 💡 升级版：背景变亮，更有穿透力的全屏沉浸特效 */}
+            <CustomCursor />
+            
             <div 
               className={`fixed inset-0 z-[-1] pointer-events-none transition-opacity duration-700 ease-in-out ${hoveredSceneBg ? 'opacity-60' : 'opacity-0'}`}
             >
@@ -449,7 +579,6 @@
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/10 to-[#050505]"></div>
             </div>
             
-            {/* 💡 全屏极客风场景详情弹窗 (支持左右切换) */}
             {activeSceneModal && activeSceneModal.current && (
               <div className="fixed inset-0 z-[80000] flex items-center justify-center p-4 md:p-12 bg-black/90 backdrop-blur-md transition-all">
                 <div className="relative w-full max-w-7xl h-[85vh] md:h-[80vh] bg-[#111] border border-zinc-700 shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in duration-300">
@@ -461,7 +590,6 @@
                     [X] CLOSE
                   </button>
                   
-                  {/* 左侧：详细的过程图或大场景图 */}
                   <div className="w-full md:w-3/5 h-1/2 md:h-full bg-black relative border-b md:border-b-0 md:border-r border-zinc-800 overflow-y-auto hide-scrollbar flex flex-col p-4 gap-6 scroll-smooth">
                     {activeSceneModal.current.detailImages && activeSceneModal.current.detailImages.length > 0 ? (
                       activeSceneModal.current.detailImages.map((imgSrc, idx) => (
@@ -500,7 +628,6 @@
                     )}
                   </div>
                   
-                  {/* 右侧：档案介绍文字与导航 */}
                   <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 md:p-10 flex flex-col bg-[#0a0a0a]">
                     <div className="text-[10px] text-cyan-500 font-mono tracking-widest mb-4 flex items-center gap-2 shrink-0">
                       <span className="w-2 h-2 bg-cyan-500 animate-pulse"></span>
@@ -514,7 +641,6 @@
                       {activeSceneModal.current.desc || 'System Note: No detailed records found in the archive for this zone.'}
                     </div>
 
-                    {/* 💡 新增：下方左右切换导航栏 */}
                     <div className="mt-4 pt-4 border-t border-zinc-800 flex justify-between items-center text-[10px] font-mono text-zinc-500 shrink-0">
                       <button 
                         onClick={() => {
@@ -634,7 +760,11 @@
                   {/* --- 动态渲染额外的内容板块 --- */}
                   {selectedProject.extraSections && selectedProject.extraSections.map((section, idx) => {
                     
-                    // 专门渲染 "scene-map" 模块
+                    // 💡 新增逻辑：解析 Interactive Flow 组件
+                    if (section.type === 'interactive-flow') {
+                      return <InteractiveFlow key={section.id || idx} section={section} />;
+                    }
+
                     if (section.type === 'scene-map') {
                       return (
                         <div key={section.id || idx} className="mt-12 md:mt-20 w-full">
@@ -647,7 +777,6 @@
                           
                           <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
                             
-                            {/* 背景：2x2场景网格阵列 */}
                             <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
                               {section.scenes.map((scene, i) => (
                                 <div 
@@ -657,7 +786,6 @@
                                   onMouseLeave={() => setHoveredSceneBg(null)}
                                   className="relative w-full h-full overflow-hidden bg-black group/scene cursor-pointer"
                                 >
-                                  {/* 💡 升级效果：悬浮时不仅恢复色彩，还会产生极其明显的放大效果 (scale-110) */}
                                   <img 
                                     src={scene.image} 
                                     alt={scene.name} 
@@ -674,7 +802,6 @@
                               ))}
                             </div>
                             
-                            {/* 中央：悬浮全息地图 (PNG) */}
                             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
                               <div className="relative w-1/2 md:w-1/3 max-w-[400px] hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_0_40px_rgba(0,0,0,0.9)]">
                                  <img 
@@ -695,7 +822,6 @@
                       );
                     }
 
-                    // 默认逻辑：渲染普通图表
                     return (
                       <div key={section.id || idx} className="mt-12 md:mt-20 w-full relative z-10">
                         <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
@@ -731,7 +857,7 @@
       // ========== 视图 A：主页列表 ==========
       return (
         <div className="min-h-screen font-mono selection:bg-white selection:text-black relative overflow-x-hidden bg-[#050505]">
-          <CustomCursor /> {/* 首页注入光标 */}
+          <CustomCursor />
           
           <header className="fixed top-0 w-full p-6 md:p-8 flex justify-between items-start z-40 pointer-events-none">
             <div className="font-sans font-black text-3xl md:text-5xl tracking-tighter uppercase pointer-events-auto mix-blend-difference">
