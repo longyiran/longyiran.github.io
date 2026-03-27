@@ -285,15 +285,39 @@
           },
           {
             id: 'c2',
-            type: 'enhanced-gallery',
+            type: 'context-slider',
             title: 'CONTEXT / 区位分析',
-            images: [
-              { src: './images/coliving-context-1.jpg', alt: 'Context Analysis 01' },
-              { src: './images/coliving-context-2.jpg', alt: 'Context Analysis 02' },
-              { src: './images/coliving-context-3.jpg', alt: 'Context Analysis 03' },
-              { src: './images/coliving-context-4.jpg', alt: 'Context Analysis 04' },
-              { src: './images/coliving-context-5.jpg', alt: 'Context Analysis 05' },
-              { src: './images/coliving-context-6.jpg', alt: 'Context Analysis 06' }
+            items: [
+              { 
+                title: 'LOCATION - 基地位置', 
+                text: '平谷区位于北京市东北部，西南距北京市中心约70公里，有新建的地铁路线即将开通运营。这样的距离，使之既能远离都市喧嚣，又保持着与城市资源的联系。它地处北京、天津、河北三省市交界，环渤海经济圈的中心位置，是连接两大城市的纽带。',
+                image: './images/coliving-context-1.jpg' 
+              },
+              { 
+                title: 'NETWORK OF TRANSPORTATION - 交通网络', 
+                text: '从北京东直门至景区：自驾车行程里程：85公里;\n所需时间：1个半小时\n852 路大站快车：平谷汽车站 ↔ 东直门枢纽\n未来地铁（22 号线 /平谷线）：预计最快约 55 分钟',
+                image: './images/coliving-context-2.jpg' 
+              },
+              { 
+                title: 'NETWORK OF MAJOR ART - 艺术区网络', 
+                text: '多数知名艺术区都在朝阳区、通州区、海淀或围绕环线较近的地带。这些地方交通便利，公共交通发达，对市区人群吸引力强。\n虽然北京整体艺术设施很多，但在“五环之外”、交通不便的区域（如平谷、怀柔、密云这些郊区）真正高品质、有特色、兼具展览＋体验＋驻留功能的艺术区非常少。',
+                image: './images/coliving-context-3.jpg' 
+              },
+              { 
+                title: 'SURROUNDING FACILITIES - 周边设施-餐厅', 
+                text: '',
+                image: './images/coliving-context-4.jpg' 
+              },
+              { 
+                title: 'SURROUNDING FACILITIES - 周边设施-住宿', 
+                text: '',
+                image: './images/coliving-context-5.jpg' 
+              },
+              { 
+                title: 'SURROUNDING FACILITIES - 周边设施-景点', 
+                text: '',
+                image: './images/coliving-context-6.jpg' 
+              }
             ]
           },
           {
@@ -301,7 +325,7 @@
             type: 'concept-text',
             title: 'SITE PLANNING / 基地规划与定位',
             headline: '乡村艺术驻地 + 微度假社区',
-            content: '从区位分析得出，建筑功能从交通、吃、住、行，结合文化精神（建筑主题）共同吸引游客。\n\n基地概要：\n基地位于北京市平谷区辖内，属于平谷“生态涵养区”定位的一部分。根据《平谷分区规划（2017‑2035）》，“生态立区、绿色发展”是该区未来发展的核心路径。在该规划中，平谷被定位为京东部的重要生态屏障与绿色发展空间，其建设控制、产业布局和用地形式均要兼顾生态安全和乡村振兴。\n\n在“三产融合”与文旅兴乡的大背景下，平谷被鼓励发展高附加值农业、休闲旅游、乡村文化产业与现代服务业。因此，基地可被定位为“乡村艺术驻地 + 微度假社区”，对标未来文旅与文化生态发展方向。'
+            content: '从区位分析得出，建筑功能从交通、吃、住、行，结合文化精神（建筑主题）共同吸引游客。'
           },
           { 
             id: 'c4', 
@@ -332,7 +356,6 @@
               { src: './images/coliving-concept-3.jpg', alt: 'Design Concept 03' }
             ]
           },
-          // 💡 新增：空间策略（文字+配图）
           {
             id: 'c10',
             type: 'concept-text',
@@ -346,7 +369,6 @@
             title: 'SPACE STRATEGY VISUALIZATION / 空间策略展示',
             image: './images/coliving-space-strategy.jpg'
           },
-          // 💡 新增：建筑设计推演（5张图滑动呈现）
           {
             id: 'c12',
             type: 'enhanced-gallery',
@@ -484,8 +506,42 @@
     }
 
     // ==========================================
-    // 💡 增强型横向画廊组件 (Cover Flow 景深放大与橙色主题效果)
-    // 增加功能：在指示器旁边显示当前图片的 Alt 文本作为标题
+    // 💡 统一折叠归档面板容器 (Accordion Wrapper)
+    // ==========================================
+    function CollapsibleSection({ title, index, hint, children }) {
+      const [isOpen, setIsOpen] = useState(false); 
+
+      return (
+        <div className="w-full relative z-10 bg-[#0a0a0a] border border-zinc-800 mb-3 transition-colors hover:border-zinc-600">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full flex justify-between items-center p-4 md:p-5 cursor-pointer bg-[#111] hover:bg-zinc-900 transition-colors"
+          >
+            <div className="flex items-center gap-4">
+              <span className="text-xs md:text-sm text-orange-500 font-mono font-bold">[{String(index + 1).padStart(2, '0')}]</span>
+              <div className="text-sm md:text-base text-zinc-200 font-bold tracking-widest uppercase text-left">
+                {title}
+              </div>
+            </div>
+            <div className="flex items-center gap-4 shrink-0">
+              {hint && <div className={`text-[10px] tracking-widest uppercase hidden md:block ${isOpen ? 'text-zinc-600' : 'text-orange-500 animate-pulse'}`}>{hint}</div>}
+              <div className={`text-xs font-mono tracking-widest px-3 py-1.5 transition-colors ${isOpen ? 'bg-zinc-800 text-zinc-400' : 'bg-orange-500 text-black hover:bg-white'}`}>
+                {isOpen ? 'CLOSE [-]' : 'OPEN [+]'}
+              </div>
+            </div>
+          </button>
+          
+          {isOpen && (
+            <div className="w-full border-t border-zinc-800 p-2 md:p-6 bg-[#050505] animate-in fade-in slide-in-from-top-4 duration-500 overflow-x-hidden">
+               {children}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 💡 增强型横向画廊组件 (剥离了外部标题与Padding)
     // ==========================================
     function EnhancedHorizontalGallery({ section }) {
       const containerRef = useRef(null);
@@ -512,66 +568,89 @@
       };
 
       useEffect(() => {
-        // 初始计算焦点
         const timer = setTimeout(handleScroll, 100);
         return () => clearTimeout(timer);
       }, []);
 
       return (
-        <div className="mt-12 md:mt-24 w-full relative z-10 group">
-          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-            <div className="text-[10px] text-orange-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
-                <span>&lt; SWIPE TO EXPLORE &gt;</span>
-            </div>
-          </div>
-          
-          {/* group/gallery 用于捕获鼠标悬浮，触发内部图片的连动放大特效 */}
-          <div className="w-full bg-[#0a0a0a] border border-zinc-800 py-6 md:py-10 relative shadow-2xl overflow-hidden group/gallery">
-            <div 
-              ref={containerRef}
-              onScroll={handleScroll}
-              className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 px-[10vw] md:px-[20vw] pb-4 items-center h-[50vh] md:h-[65vh]"
-            >
-              {section.images.map((img, i) => (
-                <div 
-                  key={i} 
-                  className={`min-w-[85%] md:min-w-[60%] h-full flex-shrink-0 snap-center relative border border-zinc-800 bg-black cursor-ew-resize overflow-hidden transition-all duration-500 ease-out ${
-                    activeIndex === i ? 'scale-100 group-hover/gallery:scale-[1.02] opacity-100 shadow-[0_0_40px_rgba(249,115,22,0.2)] z-20' : 'scale-[0.85] group-hover/gallery:scale-[0.88] opacity-30 group-hover/gallery:opacity-60 z-10'
-                  }`}
-                >
-                   <img 
-                      src={img.src} 
-                      alt={img.alt} 
-                      className={`w-full h-full object-contain transition-transform duration-1000 ${activeIndex === i ? 'scale-105 group-hover/gallery:scale-110' : 'scale-100 group-hover/gallery:scale-105'}`}
-                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                   />
-                   <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600">
-                      <span>[IMG_MISSING: {img.src}]</span>
-                   </div>
-                   
-                   {/* 💡 显示下标与图片标题 (Alt Text) */}
-                   <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-orange-500/50 text-orange-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10 flex items-center gap-2`}>
-                      <span>{String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}</span>
-                      {img.alt && (
-                        <>
-                          <span className="w-px h-3 bg-zinc-600"></span>
-                          <span className="uppercase tracking-widest">{img.alt}</span>
-                        </>
-                      )}
-                   </div>
-                </div>
-              ))}
-            </div>
+        <div className="w-full bg-[#0a0a0a] border border-zinc-800 py-6 md:py-10 relative shadow-2xl overflow-hidden group/gallery">
+          <div 
+            ref={containerRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 px-[10vw] md:px-[20vw] pb-4 items-center h-[50vh] md:h-[65vh]"
+          >
+            {section.images.map((img, i) => (
+              <div 
+                key={i} 
+                className={`min-w-[85%] md:min-w-[60%] h-full flex-shrink-0 snap-center relative border border-zinc-800 bg-black cursor-ew-resize overflow-hidden transition-all duration-500 ease-out ${
+                  activeIndex === i ? 'scale-100 group-hover/gallery:scale-[1.02] opacity-100 shadow-[0_0_40px_rgba(249,115,22,0.2)] z-20' : 'scale-[0.85] group-hover/gallery:scale-[0.88] opacity-30 group-hover/gallery:opacity-60 z-10'
+                }`}
+              >
+                 <img 
+                    src={img.src} 
+                    alt={img.alt} 
+                    className={`w-full h-full object-contain transition-transform duration-1000 ${activeIndex === i ? 'scale-105 group-hover/gallery:scale-110' : 'scale-100 group-hover/gallery:scale-105'}`}
+                    onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                 />
+                 <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600">
+                    <span>[IMG_MISSING: {img.src}]</span>
+                 </div>
+                 
+                 <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-orange-500/50 text-orange-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10 flex items-center gap-2`}>
+                    <span>{String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}</span>
+                    {img.alt && (
+                      <>
+                        <span className="w-px h-3 bg-zinc-600"></span>
+                        <span className="uppercase tracking-widest">{img.alt}</span>
+                      </>
+                    )}
+                 </div>
+              </div>
+            ))}
           </div>
         </div>
       );
     }
 
     // ==========================================
-    // 💡 自然与文化组件 (卡片型 Cover Flow)
+    // 💡 自然与文化组件 (剥离了外部标题与Padding)
     // ==========================================
     function NatureCultureGallery({ section }) {
+      return (
+        <div className="w-full relative py-4">
+          <div className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 pb-8 items-stretch md:px-[5vw]">
+            {section.cards.map((card, i) => (
+              <div 
+                key={card.id} 
+                className="min-w-[85%] md:min-w-[40%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border border-zinc-800 transition-all duration-500 ease-out cursor-ew-resize hover:border-green-500/40 hover:shadow-[0_0_30px_rgba(34,197,94,0.1)] opacity-100 z-10"
+              >
+                 <div className="w-full aspect-[16/9] relative overflow-hidden bg-black border-b border-zinc-800 group/img">
+                   <img 
+                      src={card.image} 
+                      alt={card.title} 
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-105"
+                      onError={(e) => { e.target.style.display='none'; }}
+                   />
+                 </div>
+                 <div className="p-6 md:p-8 flex flex-col flex-grow">
+                   <div className="flex items-center gap-2 mb-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                      <h4 className="text-white text-lg font-bold tracking-widest uppercase">{card.title}</h4>
+                   </div>
+                   <div className="text-green-400/80 text-[10px] font-mono mb-4 uppercase tracking-widest">{card.subtitle}</div>
+                   <p className="text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">{card.desc}</p>
+                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 💡 左右分栏式：区位分析交互组件 (剥离了外部标题与Padding)
+    // ==========================================
+    function ContextSlider({ section }) {
       const containerRef = useRef(null);
       const [activeIndex, setActiveIndex] = useState(0);
 
@@ -595,51 +674,78 @@
         setActiveIndex(closestIndex);
       };
 
+      const scrollTo = (index) => {
+        if (!containerRef.current) return;
+        const container = containerRef.current;
+        const child = container.children[index];
+        if (child) {
+          container.scrollTo({
+            left: child.offsetLeft,
+            behavior: 'smooth'
+          });
+        }
+      };
+
       useEffect(() => {
         const timer = setTimeout(handleScroll, 100);
         return () => clearTimeout(timer);
       }, []);
 
       return (
-        <div className="mt-12 md:mt-24 w-full relative z-10 group">
-          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
-            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-            <div className="text-[10px] text-green-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
-                <span>&lt; SCROLL &gt;</span>
-            </div>
-          </div>
-          
-          <div className="w-full relative py-4 group/gallery">
+        <div className="relative w-full aspect-[4/3] md:aspect-[21/9] bg-[#050505] overflow-hidden flex flex-col md:flex-row shadow-2xl border border-zinc-800">
+          <div className="w-full md:w-2/3 h-1/2 md:h-full relative overflow-hidden bg-black group/gallery border-b md:border-b-0 md:border-r border-zinc-800">
             <div 
               ref={containerRef}
               onScroll={handleScroll}
-              className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 px-[10vw] md:px-[25vw] pb-8 items-stretch"
+              className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory w-full h-full items-center"
             >
-              {section.cards.map((card, i) => (
-                <div 
-                  key={card.id} 
-                  className={`min-w-[85%] md:min-w-[45%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border transition-all duration-500 ease-out cursor-ew-resize ${
-                    activeIndex === i ? 'border-green-500/40 group-hover/gallery:scale-[1.02] scale-100 opacity-100 shadow-[0_0_30px_rgba(34,197,94,0.1)] z-20' : 'border-zinc-800 scale-90 group-hover/gallery:scale-[0.93] group-hover/gallery:opacity-60 opacity-40 z-10'
-                  }`}
-                >
-                   <div className="w-full aspect-[16/9] relative overflow-hidden bg-black border-b border-zinc-800">
-                     <img 
-                        src={card.image} 
-                        alt={card.title} 
-                        className={`w-full h-full object-cover transition-transform duration-1000 ${activeIndex === i ? 'scale-105 group-hover/gallery:scale-110' : 'scale-100 group-hover/gallery:scale-105'}`}
-                        onError={(e) => { e.target.style.display='none'; }}
-                     />
-                   </div>
-                   <div className="p-6 md:p-8 flex flex-col flex-grow">
-                     <div className="flex items-center gap-2 mb-2">
-                        <span className={`w-1.5 h-1.5 rounded-full transition-colors ${activeIndex === i ? 'bg-green-500 animate-pulse' : 'bg-zinc-600'}`}></span>
-                        <h4 className="text-white text-lg font-bold tracking-widest uppercase">{card.title}</h4>
-                     </div>
-                     <div className="text-green-400/80 text-[10px] font-mono mb-4 uppercase tracking-widest">{card.subtitle}</div>
-                     <p className="text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">{card.desc}</p>
-                   </div>
+              {section.items.map((item, i) => (
+                <div key={i} className="min-w-full h-full flex-shrink-0 snap-center flex justify-center items-center p-2 md:p-6 cursor-ew-resize">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className={`w-full h-full object-contain transition-transform duration-700 ${activeIndex === i ? 'scale-100 group-hover/gallery:scale-[1.02]' : 'scale-95 opacity-50'}`}
+                    onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                  />
+                  <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
+                      <span>[IMG_NOT_FOUND]</span>
+                  </div>
                 </div>
               ))}
+            </div>
+            <div className="absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border border-orange-500/50 text-orange-400 text-[10px] font-mono backdrop-blur-sm z-10 pointer-events-none">
+                {String(activeIndex + 1).padStart(2, '0')} / {String(section.items.length).padStart(2, '0')}
+            </div>
+          </div>
+          <div className="w-full md:w-1/3 h-1/2 md:h-full p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
+            <div className="text-orange-500 text-[10px] font-mono mb-2 flex items-center gap-2 shrink-0">
+                <span className="w-1.5 h-1.5 bg-orange-500 animate-pulse"></span>
+                :/ DATA_ARCHIVE: 0{activeIndex + 1}
+            </div>
+            <h4 className="text-white text-xl md:text-2xl font-bold mb-4 uppercase tracking-tighter shrink-0">
+                {section.items[activeIndex].title}
+            </h4>
+            <div className="text-zinc-400 text-xs md:text-sm leading-relaxed text-justify whitespace-pre-wrap flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
+                {section.items[activeIndex].text}
+            </div>
+            <div className="mt-4 pt-4 border-t border-zinc-800 flex justify-between items-center text-[10px] font-mono text-zinc-500 shrink-0">
+                <button 
+                  onClick={() => scrollTo(Math.max(0, activeIndex - 1))}
+                  className={`hover:text-orange-400 transition-colors cursor-pointer ${activeIndex === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
+                >
+                  &lt; PREV
+                </button>
+                <div className="flex gap-1">
+                  {section.items.map((_, i) => (
+                    <span key={i} className={`w-1.5 h-1.5 rounded-full ${i === activeIndex ? 'bg-orange-500' : 'bg-zinc-700'}`}></span>
+                  ))}
+                </div>
+                <button 
+                  onClick={() => scrollTo(Math.min(section.items.length - 1, activeIndex + 1))}
+                  className={`hover:text-orange-400 transition-colors cursor-pointer ${activeIndex === section.items.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}`}
+                >
+                  NEXT &gt;
+                </button>
             </div>
           </div>
         </div>
@@ -647,148 +753,130 @@
     }
 
     // ==========================================
-    // 💡 交互式拆解流程图组件
+    // 💡 交互式拆解流程图组件 (剥离了外部标题与Padding)
     // ==========================================
     function InteractiveFlow({ section }) {
       const [activeStep, setActiveStep] = useState(0);
 
       return (
-        <div className="mt-12 md:mt-20 w-full relative z-10">
-          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse">
-              [ CLICK TO INTERACT ]
-            </div>
+        <div className="w-full bg-[#111] border border-zinc-800 p-1 flex flex-col shadow-2xl">
+          <div className="flex flex-wrap md:flex-nowrap border-b border-zinc-800">
+            {section.steps.map((step, idx) => (
+              <button
+                key={step.id}
+                onClick={() => setActiveStep(idx)}
+                className={`flex-1 p-3 md:p-4 flex flex-col items-center justify-center border-r border-zinc-800 last:border-r-0 transition-all cursor-pointer ${
+                  activeStep === idx 
+                    ? 'bg-cyan-900/30 text-cyan-400' 
+                    : 'bg-black text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
+                }`}
+              >
+                <span className="text-xl mb-2 font-serif">{step.icon}</span>
+                <span className="text-[10px] font-mono tracking-widest text-center">{step.title}</span>
+              </button>
+            ))}
           </div>
 
-          <div className="w-full bg-[#111] border border-zinc-800 p-1 flex flex-col shadow-2xl">
-            <div className="flex flex-wrap md:flex-nowrap border-b border-zinc-800">
-              {section.steps.map((step, idx) => (
-                <button
-                  key={step.id}
-                  onClick={() => setActiveStep(idx)}
-                  className={`flex-1 p-3 md:p-4 flex flex-col items-center justify-center border-r border-zinc-800 last:border-r-0 transition-all cursor-pointer ${
-                    activeStep === idx 
-                      ? 'bg-cyan-900/30 text-cyan-400' 
-                      : 'bg-black text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
-                  }`}
-                >
-                  <span className="text-xl mb-2 font-serif">{step.icon}</span>
-                  <span className="text-[10px] font-mono tracking-widest text-center">{step.title}</span>
-                </button>
-              ))}
-            </div>
+          <div className="relative w-full aspect-[4/3] md:aspect-[21/9] bg-[#050505] overflow-hidden flex flex-col md:flex-row">
+              <div className="w-full md:w-2/3 h-1/2 md:h-full relative p-2 md:p-6 flex items-center justify-center">
+                  <img
+                      src={section.steps[activeStep].image}
+                      className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-700"
+                      alt={section.steps[activeStep].title}
+                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                  />
+                  <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
+                      <span>[IMG_NOT_FOUND]</span>
+                      <span>REQ: {section.steps[activeStep].image}</span>
+                  </div>
 
-            <div className="relative w-full aspect-[4/3] md:aspect-[21/9] bg-[#050505] overflow-hidden flex flex-col md:flex-row">
-                <div className="w-full md:w-2/3 h-1/2 md:h-full relative p-2 md:p-6 flex items-center justify-center">
-                    <img
-                        src={section.steps[activeStep].image}
-                        className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-700"
-                        alt={section.steps[activeStep].title}
-                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                    />
-                    <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
-                        <span>[IMG_NOT_FOUND]</span>
-                        <span>REQ: {section.steps[activeStep].image}</span>
-                    </div>
-
-                    {section.steps[activeStep].assets && (
-                      <div className="absolute top-2 right-2 md:top-6 md:right-6 flex flex-col gap-2 md:gap-4 pointer-events-none z-20">
-                        {section.steps[activeStep].assets.map((asset, idx) => (
-                          <div key={idx} className="bg-black/80 backdrop-blur-md border border-red-900/60 p-1.5 md:p-2 shadow-[0_0_20px_rgba(220,38,38,0.15)] animate-in slide-in-from-right fade-in duration-500" style={{ animationDelay: `${idx * 150}ms` }}>
-                            <div className="text-[8px] md:text-[10px] text-red-500 font-mono mb-1 tracking-widest uppercase flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
-                              :/ {asset.alt}
-                            </div>
-                            <img 
-                              src={asset.src} 
-                              alt={asset.alt} 
-                              className="w-24 md:w-32 h-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.3)]" 
-                              onError={(e) => { e.target.parentElement.style.display='none'; }}
-                            />
+                  {section.steps[activeStep].assets && (
+                    <div className="absolute top-2 right-2 md:top-6 md:right-6 flex flex-col gap-2 md:gap-4 pointer-events-none z-20">
+                      {section.steps[activeStep].assets.map((asset, idx) => (
+                        <div key={idx} className="bg-black/80 backdrop-blur-md border border-red-900/60 p-1.5 md:p-2 shadow-[0_0_20px_rgba(220,38,38,0.15)] animate-in slide-in-from-right fade-in duration-500" style={{ animationDelay: `${idx * 150}ms` }}>
+                          <div className="text-[8px] md:text-[10px] text-red-500 font-mono mb-1 tracking-widest uppercase flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+                            :/ {asset.alt}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                </div>
-                <div className="w-full md:w-1/3 h-1/2 md:h-full border-t md:border-t-0 md:border-l border-zinc-800 p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
-                    <div className="text-cyan-500 text-[10px] font-mono mb-2 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-cyan-500 animate-pulse"></span>
-                        :/ PHASE_0{activeStep + 1}
+                          <img 
+                            src={asset.src} 
+                            alt={asset.alt} 
+                            className="w-24 md:w-32 h-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,0,0,0.3)]" 
+                            onError={(e) => { e.target.parentElement.style.display='none'; }}
+                          />
+                        </div>
+                      ))}
                     </div>
-                    <h4 className="text-white text-lg md:text-xl font-bold mb-4 uppercase tracking-tighter">
-                        {section.steps[activeStep].title}
-                    </h4>
-                    <p className="text-zinc-400 text-xs leading-relaxed text-justify whitespace-pre-wrap">
-                        {section.steps[activeStep].desc}
-                    </p>
-                </div>
-            </div>
+                  )}
+              </div>
+              <div className="w-full md:w-1/3 h-1/2 md:h-full border-t md:border-t-0 md:border-l border-zinc-800 p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
+                  <div className="text-cyan-500 text-[10px] font-mono mb-2 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-cyan-500 animate-pulse"></span>
+                      :/ PHASE_0{activeStep + 1}
+                  </div>
+                  <h4 className="text-white text-lg md:text-xl font-bold mb-4 uppercase tracking-tighter">
+                      {section.steps[activeStep].title}
+                  </h4>
+                  <p className="text-zinc-400 text-xs leading-relaxed text-justify whitespace-pre-wrap">
+                      {section.steps[activeStep].desc}
+                  </p>
+              </div>
           </div>
         </div>
       );
     }
 
     // ==========================================
-    // 💡 地形解谜流程组件
+    // 💡 地形解谜流程组件 (剥离了外部标题与Padding)
     // ==========================================
     function TerrainPuzzleFlow({ section }) {
       const [activeStep, setActiveStep] = useState(0);
 
       return (
-        <div className="mt-12 md:mt-20 w-full relative z-10">
-          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse">
-              [ EXPLORE GESTURE PUZZLE ]
-            </div>
+        <div className="w-full bg-[#111] border border-zinc-800 p-1 flex flex-col shadow-2xl">
+          <div className="flex flex-wrap md:flex-nowrap border-b border-zinc-800">
+            {section.steps.map((step, idx) => (
+              <button
+                key={step.id}
+                onClick={() => setActiveStep(idx)}
+                className={`flex-1 p-3 md:p-4 flex flex-col items-center justify-center border-r border-zinc-800 last:border-r-0 transition-all cursor-pointer ${
+                  activeStep === idx 
+                    ? 'bg-cyan-900/30 text-cyan-400' 
+                    : 'bg-black text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
+                }`}
+              >
+                <span className="text-xl mb-2 font-serif">{step.icon}</span>
+                <span className="text-[10px] font-mono tracking-widest text-center">{step.title}</span>
+              </button>
+            ))}
           </div>
 
-          <div className="w-full bg-[#111] border border-zinc-800 p-1 flex flex-col shadow-2xl">
-            <div className="flex flex-wrap md:flex-nowrap border-b border-zinc-800">
-              {section.steps.map((step, idx) => (
-                <button
-                  key={step.id}
-                  onClick={() => setActiveStep(idx)}
-                  className={`flex-1 p-3 md:p-4 flex flex-col items-center justify-center border-r border-zinc-800 last:border-r-0 transition-all cursor-pointer ${
-                    activeStep === idx 
-                      ? 'bg-cyan-900/30 text-cyan-400' 
-                      : 'bg-black text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
-                  }`}
-                >
-                  <span className="text-xl mb-2 font-serif">{step.icon}</span>
-                  <span className="text-[10px] font-mono tracking-widest text-center">{step.title}</span>
-                </button>
-              ))}
-            </div>
+          <div className="relative w-full aspect-[4/3] md:aspect-[21/9] bg-[#050505] overflow-hidden flex flex-col md:flex-row shadow-inner">
+              <div className="w-full md:w-2/3 h-1/2 md:h-full relative p-2 md:p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-zinc-800">
+                  <img
+                      src={section.steps[activeStep].image}
+                      className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-700"
+                      alt={section.steps[activeStep].title}
+                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                  />
+                  <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
+                      <span>[VR_SCENE_NOT_FOUND]</span>
+                      <span>REQ: {section.steps[activeStep].image}</span>
+                  </div>
+              </div>
 
-            <div className="relative w-full aspect-[4/3] md:aspect-[21/9] bg-[#050505] overflow-hidden flex flex-col md:flex-row shadow-inner">
-                <div className="w-full md:w-2/3 h-1/2 md:h-full relative p-2 md:p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-zinc-800">
-                    <img
-                        src={section.steps[activeStep].image}
-                        className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-700"
-                        alt={section.steps[activeStep].title}
-                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                    />
-                    <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
-                        <span>[VR_SCENE_NOT_FOUND]</span>
-                        <span>REQ: {section.steps[activeStep].image}</span>
-                    </div>
-                </div>
-
-                <div className="w-full md:w-1/3 h-1/2 md:h-full p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
-                    <div className="text-cyan-500 text-[10px] font-mono mb-2 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-cyan-500 animate-pulse"></span>
-                        :/ ACTION_PUZZLE: 0{activeStep + 1}
-                    </div>
-                    <h4 className="text-white text-lg md:text-xl font-bold mb-4 uppercase tracking-tighter">
-                        {section.steps[activeStep].title}
-                    </h4>
-                    <p className="text-zinc-400 text-xs leading-relaxed text-justify whitespace-pre-wrap">
-                        {section.steps[activeStep].desc}
-                    </p>
-                </div>
-            </div>
+              <div className="w-full md:w-1/3 h-1/2 md:h-full p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
+                  <div className="text-cyan-500 text-[10px] font-mono mb-2 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-cyan-500 animate-pulse"></span>
+                      :/ ACTION_PUZZLE: 0{activeStep + 1}
+                  </div>
+                  <h4 className="text-white text-lg md:text-xl font-bold mb-4 uppercase tracking-tighter">
+                      {section.steps[activeStep].title}
+                  </h4>
+                  <p className="text-zinc-400 text-xs leading-relaxed text-justify whitespace-pre-wrap">
+                      {section.steps[activeStep].desc}
+                  </p>
+              </div>
           </div>
         </div>
       );
@@ -1131,174 +1219,147 @@
                     )}
                   </div>
 
-                  {/* --- 动态渲染额外的内容板块 --- */}
-                  {selectedProject.extraSections && selectedProject.extraSections.map((section, idx) => {
-                    
-                    // 💡 修改：橙绿配色的主题与概念深化排版
-                    if (section.type === 'theme-deepening') {
-                      return (
-                        <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
-                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
-                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                          </div>
-                          <div className="relative p-8 md:p-16 bg-gradient-to-br from-[#111] to-[#050505] border border-zinc-800 overflow-hidden group">
-                            {/* 顶部橙色、底部绿色的发光线条 */}
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-transparent"></div>
-                            <div className="absolute bottom-0 right-0 w-1/3 h-1 bg-gradient-to-l from-green-500 to-transparent"></div>
-                            
-                            <div className="absolute right-[-5%] bottom-0 md:right-10 md:bottom-10 opacity-30 md:opacity-70 transition-transform duration-1000 group-hover:scale-105 group-hover:opacity-100 pointer-events-none">
-                              <img src={section.pngAsset} alt="Theme Asset" className="w-48 md:w-80 h-auto object-contain filter drop-shadow-[0_0_25px_rgba(249,115,22,0.4)]" onError={(e) => { e.target.style.display='none'; }}/>
-                            </div>
+                  {/* --- 动态渲染额外的内容板块 (折叠手风琴) --- */}
+                  {selectedProject.extraSections && selectedProject.extraSections.length > 0 && (
+                    <div className="mt-16 md:mt-24 w-full">
+                      <div className="flex items-center gap-4 mb-6 border-b border-zinc-800 pb-4">
+                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-widest uppercase">:/ CONTENT ARCHIVE</h2>
+                        <span className="text-xs font-mono text-orange-500 bg-orange-900/20 border border-orange-500/30 px-2 py-1">
+                          {selectedProject.extraSections.length} SECTIONS
+                        </span>
+                      </div>
+                      
+                      <div className="w-full flex flex-col">
+                        {selectedProject.extraSections.map((section, idx) => {
+                          let content = null;
+                          let hint = null;
 
-                            <div className="relative z-10 space-y-10 md:w-3/4">
-                              <div className="space-y-6">
-                                {section.questions.map((q, i) => (
-                                  <h3 key={i} className="text-2xl md:text-4xl font-sans font-black text-white tracking-tight leading-snug drop-shadow-md">
-                                    {q}
-                                  </h3>
-                                ))}
-                              </div>
-                              <div className="pl-6 border-l-4 border-orange-600 bg-orange-900/10 p-4 backdrop-blur-sm">
-                                <h4 className="text-orange-400 font-bold text-lg mb-4 tracking-widest">{section.statementTitle}</h4>
-                                <div className="text-zinc-300 text-sm md:text-base leading-loose whitespace-pre-wrap font-sans">
-                                  {section.statement}
+                          // 预处理每种类型的专属内容与提示语
+                          if (section.type === 'theme-deepening') {
+                            content = (
+                              <div className="relative p-6 md:p-12 bg-gradient-to-br from-[#111] to-[#050505] border border-zinc-800 overflow-hidden group">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-transparent"></div>
+                                <div className="absolute bottom-0 right-0 w-1/3 h-1 bg-gradient-to-l from-green-500 to-transparent"></div>
+                                <div className="absolute right-[-5%] bottom-0 md:right-10 md:bottom-10 opacity-30 md:opacity-70 transition-transform duration-1000 group-hover:scale-105 group-hover:opacity-100 pointer-events-none">
+                                  <img src={section.pngAsset} alt="Theme Asset" className="w-48 md:w-80 h-auto object-contain filter drop-shadow-[0_0_25px_rgba(249,115,22,0.4)]" onError={(e) => { e.target.style.display='none'; }}/>
+                                </div>
+                                <div className="relative z-10 space-y-10 md:w-3/4">
+                                  <div className="space-y-6">
+                                    {section.questions.map((q, i) => (
+                                      <h3 key={i} className="text-2xl md:text-4xl font-sans font-black text-white tracking-tight leading-snug drop-shadow-md">
+                                        {q}
+                                      </h3>
+                                    ))}
+                                  </div>
+                                  <div className="pl-6 border-l-4 border-orange-600 bg-orange-900/10 p-4 backdrop-blur-sm">
+                                    <h4 className="text-orange-400 font-bold text-lg mb-4 tracking-widest">{section.statementTitle}</h4>
+                                    <div className="text-zinc-300 text-sm md:text-base leading-loose whitespace-pre-wrap font-sans">
+                                      {section.statement}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-
-                    // 💡 修改：概念文字排版的主题色也改为橙色
-                    if (section.type === 'concept-text') {
-                      return (
-                        <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
-                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
-                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                          </div>
-                          
-                          <div className="pl-6 md:pl-10 border-l-2 border-orange-700 relative bg-gradient-to-r from-orange-900/10 to-transparent py-4">
-                            <div className="absolute top-0 left-[-5px] w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
-                            <h3 className="text-xl md:text-3xl font-sans font-black text-white mb-6 tracking-tight">
-                              {section.headline}
-                            </h3>
-                            <div className="text-zinc-400 text-sm md:text-base leading-loose font-sans text-justify whitespace-pre-wrap">
-                              {section.content}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-
-                    // 💡 新增：左右分屏同步展示文字的区位分析幻灯片
-                    if (section.type === 'context-slider') {
-                      return <ContextSlider key={section.id || idx} section={section} />;
-                    }
-
-                    // 💡 修改：带有橙色主题和悬浮吸附放大效果的横向大画廊组件
-                    if (section.type === 'enhanced-gallery') {
-                      return <EnhancedHorizontalGallery key={section.id || idx} section={section} />;
-                    }
-
-                    // 💡 自然与文化画廊恢复常态滑动
-                    if (section.type === 'nature-culture-gallery') {
-                      return <NatureCultureGallery key={section.id || idx} section={section} />;
-                    }
-
-                    if (section.type === 'interactive-flow') {
-                      return <InteractiveFlow key={section.id || idx} section={section} />;
-                    }
-
-                    if (section.type === 'terrain-puzzle-flow') {
-                      return <TerrainPuzzleFlow key={section.id || idx} section={section} />;
-                    }
-
-                    if (section.type === 'scene-map') {
-                      return (
-                        <div key={section.id || idx} className="mt-12 md:mt-20 w-full">
-                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse">
-                              [ HOVER & CLICK ]
-                            </div>
-                          </div>
-                          
-                          <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
-                            
-                            <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
-                              {section.scenes.map((scene, i) => (
-                                <div 
-                                  key={i} 
-                                  onClick={() => setActiveSceneModal({ current: scene, list: section.scenes, index: i })}
-                                  onMouseEnter={() => setHoveredSceneBg(scene.image)}
-                                  onMouseLeave={() => setHoveredSceneBg(null)}
-                                  className="relative w-full h-full overflow-hidden bg-black group/scene cursor-pointer"
-                                >
+                            );
+                          } else if (section.type === 'concept-text') {
+                            content = (
+                              <div className="pl-6 md:pl-10 border-l-2 border-orange-700 relative bg-gradient-to-r from-orange-900/10 to-transparent py-4">
+                                <div className="absolute top-0 left-[-5px] w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
+                                <h3 className="text-xl md:text-3xl font-sans font-black text-white mb-6 tracking-tight">
+                                  {section.headline}
+                                </h3>
+                                <div className="text-zinc-400 text-sm md:text-base leading-loose font-sans text-justify whitespace-pre-wrap">
+                                  {section.content}
+                                </div>
+                              </div>
+                            );
+                          } else if (section.type === 'context-slider') {
+                            hint = '< SWIPE TO EXPLORE >';
+                            content = <ContextSlider section={section} />;
+                          } else if (section.type === 'enhanced-gallery') {
+                            hint = '< SWIPE TO EXPLORE >';
+                            content = <EnhancedHorizontalGallery section={section} />;
+                          } else if (section.type === 'nature-culture-gallery') {
+                            hint = '< SCROLL >';
+                            content = <NatureCultureGallery section={section} />;
+                          } else if (section.type === 'interactive-flow') {
+                            hint = '[ CLICK TO INTERACT ]';
+                            content = <InteractiveFlow section={section} />;
+                          } else if (section.type === 'terrain-puzzle-flow') {
+                            hint = '[ EXPLORE GESTURE PUZZLE ]';
+                            content = <TerrainPuzzleFlow section={section} />;
+                          } else if (section.type === 'scene-map') {
+                            hint = '[ HOVER & CLICK ]';
+                            content = (
+                              <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
+                                <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
+                                  {section.scenes.map((scene, i) => (
+                                    <div 
+                                      key={i} 
+                                      onClick={() => setActiveSceneModal({ current: scene, list: section.scenes, index: i })}
+                                      onMouseEnter={() => setHoveredSceneBg(scene.image)}
+                                      onMouseLeave={() => setHoveredSceneBg(null)}
+                                      className="relative w-full h-full overflow-hidden bg-black group/scene cursor-pointer"
+                                    >
+                                      <img 
+                                        src={scene.image} 
+                                        alt={scene.name} 
+                                        className="w-full h-full object-cover grayscale opacity-70 group-hover/scene:grayscale-0 group-hover/scene:opacity-100 group-hover/scene:scale-110 transition-all duration-700" 
+                                        onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                                      />
+                                      <div className="absolute inset-0 hidden items-center justify-center bg-[#111]">
+                                        <span className="text-zinc-600 text-[10px] font-mono opacity-50">[SCENE_{i+1}]</span>
+                                      </div>
+                                      <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-[8px] md:text-[10px] font-bold tracking-widest text-white/50 group-hover/scene:text-white uppercase drop-shadow-md z-10 transition-colors bg-black/60 px-2 py-1 backdrop-blur-sm border border-zinc-700 group-hover/scene:border-white">
+                                        {scene.name} &gt;
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                                  <div className="relative w-1/2 md:w-1/3 max-w-[400px] hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+                                     <img 
+                                       src={section.centerMap} 
+                                       alt="Central Floor Plan" 
+                                       className="w-full h-auto object-contain" 
+                                       onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                                     />
+                                     <div className="absolute inset-0 hidden flex-col items-center justify-center border border-dashed border-zinc-500 rounded-full bg-black/50 backdrop-blur-md">
+                                       <span className="text-zinc-400 text-xs font-mono mb-1">Upload Map PNG</span>
+                                       <span className="text-zinc-600 text-[8px] font-mono">./images/signless-map.png</span>
+                                     </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          } else if (section.type === 'image') {
+                            content = (
+                              <div className="w-full bg-[#111] border border-zinc-800 relative p-1 overflow-hidden group">
+                                <div className="relative z-10 flex justify-center">
                                   <img 
-                                    src={scene.image} 
-                                    alt={scene.name} 
-                                    className="w-full h-full object-cover grayscale opacity-70 group-hover/scene:grayscale-0 group-hover/scene:opacity-100 group-hover/scene:scale-110 transition-all duration-700" 
+                                    src={section.image} 
+                                    alt={section.title} 
+                                    className="opacity-90 grayscale hover:grayscale-0 transition-all duration-700 block w-full h-auto object-contain"
                                     onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                                   />
-                                  <div className="absolute inset-0 hidden items-center justify-center bg-[#111]">
-                                    <span className="text-zinc-600 text-[10px] font-mono opacity-50">[SCENE_{i+1}]</span>
-                                  </div>
-                                  <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-[8px] md:text-[10px] font-bold tracking-widest text-white/50 group-hover/scene:text-white uppercase drop-shadow-md z-10 transition-colors bg-black/60 px-2 py-1 backdrop-blur-sm border border-zinc-700 group-hover/scene:border-white">
-                                    {scene.name} &gt;
+                                  <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0 min-w-full">
+                                    <span className="text-zinc-600 text-sm tracking-widest opacity-50 font-mono">
+                                      [IMG_REQ: {section.title}]
+                                    </span>
                                   </div>
                                 </div>
-                              ))}
-                            </div>
-                            
-                            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                              <div className="relative w-1/2 md:w-1/3 max-w-[400px] hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_0_40px_rgba(0,0,0,0.9)]">
-                                 <img 
-                                   src={section.centerMap} 
-                                   alt="Central Floor Plan" 
-                                   className="w-full h-auto object-contain" 
-                                   onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                                 />
-                                 <div className="absolute inset-0 hidden flex-col items-center justify-center border border-dashed border-zinc-500 rounded-full bg-black/50 backdrop-blur-md">
-                                   <span className="text-zinc-400 text-xs font-mono mb-1">Upload Map PNG</span>
-                                   <span className="text-zinc-600 text-[8px] font-mono">./images/signless-map.png</span>
-                                 </div>
                               </div>
-                            </div>
-                            
-                          </div>
-                        </div>
-                      );
-                    }
+                            );
+                          }
 
-                    // 常规图片模块
-                    if (section.type === 'image') {
-                      return (
-                        <div key={section.id || idx} className="mt-12 md:mt-20 w-full relative z-10">
-                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                          </div>
-                          
-                          <div className="w-full bg-[#111] border border-zinc-800 relative p-1 overflow-hidden group">
-                            <div className="relative z-10 flex justify-center">
-                              <img 
-                                src={section.image} 
-                                alt={section.title} 
-                                className="opacity-90 grayscale hover:grayscale-0 transition-all duration-700 block w-full h-auto object-contain"
-                                onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                              />
-                              <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0 min-w-full">
-                                <span className="text-zinc-600 text-sm tracking-widest opacity-50 font-mono">
-                                  [IMG_REQ: {section.title}]
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
+                          return (
+                            <CollapsibleSection key={section.id || idx} title={section.title} index={idx} hint={hint}>
+                              {content}
+                            </CollapsibleSection>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                 </div>
               </div>
