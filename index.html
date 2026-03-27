@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lorraine Long_ | Portfolio</title>
   
-  <!-- 引入 React, ReactDOM, Babel 和 Tailwind CSS -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,6 +12,9 @@
   
   <style>
     html { scroll-behavior: smooth; }
+    /* --- 新增：彻底隐藏系统默认鼠标 --- */
+    * { cursor: none !important; }
+    
     body {
       margin: 0;
       background-color: #050505;
@@ -21,7 +23,6 @@
       color: white;
     }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
-    /* 隐藏特定区域的滚动条 */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
@@ -113,6 +114,60 @@
         { year: '2023.10 - 2024.10', title: '清华大学艺术博物馆', desc: '志愿者 VOLUNTEER' }
       ]
     };
+
+    // ==========================================
+    // 💡 新增：独立的光标组件 (极客拖尾+准星)
+    // ==========================================
+    function CustomCursor() {
+      const [pos, setPos] = useState({ x: -100, y: -100 });
+      const [isPointer, setIsPointer] = useState(false);
+
+      useEffect(() => {
+        const handleMouseMove = (e) => {
+          setPos({ x: e.clientX, y: e.clientY });
+          
+          // 检测当前鼠标悬浮的是不是可交互元素
+          const target = e.target;
+          const isClickable = 
+            window.getComputedStyle(target).cursor === 'pointer' || 
+            target.tagName.toLowerCase() === 'button' || 
+            target.tagName.toLowerCase() === 'a' ||
+            target.closest('button') || 
+            target.closest('a') ||
+            target.closest('.cursor-pointer');
+            
+          setIsPointer(!!isClickable);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+      }, []);
+
+      // 如果鼠标还没动，先不显示
+      if (pos.x === -100) return null;
+
+      return (
+        <div className="pointer-events-none fixed inset-0 z-[99999]">
+          {/* 1. 屏幕十字辅助雷达线 (轻微透明) */}
+          <div className="absolute w-screen h-[1px] bg-white/5" style={{ top: pos.y, left: 0 }} />
+          <div className="absolute h-screen w-[1px] bg-white/5" style={{ left: pos.x, top: 0 }} />
+          
+          {/* 2. 延迟拖尾的外圈 (带呼吸放大特效) */}
+          <div 
+            className={`absolute border rounded-full transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out flex items-center justify-center mix-blend-difference
+              ${isPointer ? 'w-12 h-12 bg-white/20 border-white/50 scale-110' : 'w-8 h-8 border-zinc-500 scale-100'}
+            `}
+            style={{ left: pos.x, top: pos.y }}
+          />
+          
+          {/* 3. 实时跟随的中心实心圆点 */}
+          <div 
+            className="absolute w-1.5 h-1.5 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+            style={{ left: pos.x, top: pos.y }}
+          />
+        </div>
+      );
+    }
 
     // ==========================================
     // 核心组件：项目卡片
@@ -254,10 +309,11 @@
       if (selectedProject) {
         return (
           <div className="min-h-screen font-mono selection:bg-white selection:text-black relative bg-[#050505] z-50">
+            <CustomCursor /> {/* 详情页注入光标 */}
             <header className="w-full p-6 md:p-8 flex justify-between items-start z-40">
               <button 
                 onClick={() => setSelectedProject(null)}
-                className="font-sans font-black text-xl md:text-2xl uppercase tracking-tighter hover:text-zinc-400 transition-colors flex items-center gap-2"
+                className="font-sans font-black text-xl md:text-2xl uppercase tracking-tighter hover:text-zinc-400 transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <span className="text-zinc-600">{"<"}</span> BACK
               </button>
@@ -329,7 +385,7 @@
                           <div className="text-[10px] text-zinc-600 tracking-widest">:/ MEDIA_PLAYER</div>
                           <button 
                             onClick={() => setIsDetailMuted(!isDetailMuted)}
-                            className={`text-[10px] font-bold tracking-widest border px-3 py-1 transition-all ${
+                            className={`cursor-pointer text-[10px] font-bold tracking-widest border px-3 py-1 transition-all ${
                               isDetailMuted 
                                 ? 'border-zinc-700 text-zinc-400 hover:text-white hover:border-white' 
                                 : 'bg-white text-black border-white'
@@ -344,7 +400,6 @@
                     )}
                   </div>
 
-                  {/* --- 修改版：灵感思路图支持放大与横向滑动 --- */}
                   {selectedProject.processImage && (
                     <div className="mt-12 md:mt-20 w-full">
                       <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
@@ -355,12 +410,11 @@
                       </div>
                       
                       <div className="w-full bg-[#111] border border-zinc-800 relative p-1 overflow-hidden group">
-                        <div className="overflow-x-auto hide-scrollbar relative z-10 cursor-ew-resize">
-                          {/* 将图片高度固定得非常大，宽度自动铺开，触发原生横向滚动 */}
+                        <div className="overflow-x-auto hide-scrollbar relative z-10">
                           <img 
                             src={selectedProject.processImage} 
                             alt="Concept and Process" 
-                            className="h-[400px] md:h-[600px] w-auto max-w-none opacity-90 grayscale hover:grayscale-0 transition-all duration-700"
+                            className="h-[400px] md:h-[600px] w-auto max-w-none opacity-90 grayscale hover:grayscale-0 transition-all duration-700 cursor-pointer"
                             onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                           />
                           <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0 min-w-full">
@@ -370,7 +424,6 @@
                           </div>
                         </div>
                         
-                        {/* 悬浮滑块图标与提示 */}
                         <div className="absolute bottom-4 right-4 bg-black/80 border border-zinc-700 text-zinc-300 text-[10px] px-3 py-1.5 font-mono tracking-widest pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 z-20 backdrop-blur-sm shadow-xl">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -391,6 +444,7 @@
       // ========== 视图 A：主页列表 ==========
       return (
         <div className="min-h-screen font-mono selection:bg-white selection:text-black relative overflow-x-hidden">
+          <CustomCursor /> {/* 首页注入光标 */}
           
           <header className="fixed top-0 w-full p-6 md:p-8 flex justify-between items-start z-40 pointer-events-none">
             <div className="font-sans font-black text-3xl md:text-5xl tracking-tighter uppercase pointer-events-auto mix-blend-difference">
@@ -410,7 +464,6 @@
 
           <main className="pt-32 pb-32 px-4 md:px-12 max-w-[1800px] mx-auto z-10 relative min-h-screen">
             
-            {/* --- 新增：巨型视觉分类导航（一眼就明白） --- */}
             <div className="mb-16 md:mb-24 flex flex-col md:flex-row items-start md:items-end gap-4 md:gap-12 border-b border-zinc-800 pb-8">
               <div className="text-zinc-600 text-[10px] md:text-xs font-mono tracking-widest uppercase mb-2 md:mb-0 w-24 shrink-0">
                 :/ DIRECTORY
@@ -420,7 +473,7 @@
                   <button
                     key={cat}
                     onClick={() => setFilter(cat)}
-                    className={`font-sans font-black text-2xl md:text-5xl uppercase tracking-tighter transition-all duration-300 ${
+                    className={`cursor-pointer font-sans font-black text-2xl md:text-5xl uppercase tracking-tighter transition-all duration-300 ${
                       filter === cat 
                         ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]' 
                         : 'text-zinc-800 hover:text-zinc-400'
@@ -444,7 +497,6 @@
             </div>
           </main>
 
-          {/* --- 新增：常驻底部终端控制面板 (取消了折叠逻辑，永远显示) --- */}
           <div className="fixed bottom-0 left-0 w-full md:bottom-6 md:left-6 z-50 md:w-[240px] shadow-2xl bg-[#050505]/95 backdrop-blur border-t md:border border-zinc-800">
             <div className="hidden md:flex bg-zinc-200 text-black px-3 py-2 text-[10px] justify-between items-center uppercase font-bold tracking-widest">
               <span>:/ FILTERS</span>
@@ -455,7 +507,7 @@
                 <button 
                   key={cat}
                   onClick={() => { setFilter(cat); window.scrollTo(0,0); }}
-                  className={`flex-shrink-0 py-4 md:py-3 px-6 md:px-4 text-center md:text-left border-r md:border-r-0 md:border-t border-zinc-800 transition-colors whitespace-nowrap ${
+                  className={`cursor-pointer flex-shrink-0 py-4 md:py-3 px-6 md:px-4 text-center md:text-left border-r md:border-r-0 md:border-t border-zinc-800 transition-colors whitespace-nowrap ${
                     filter === cat ? 'bg-white text-black font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
                   }`}
                 >
