@@ -598,18 +598,17 @@
     }
 
     // ==========================================
-    // 💡 全新功能：楼层空间沙盘导航展示组件 (完美悬浮左侧背景版)
+    // 💡 全新功能：楼层空间沙盘导航展示组件 (调用全局背景特效版)
     // ==========================================
-    function FloorPlanGallery({ section }) {
+    function FloorPlanGallery({ section, setHoveredSceneBg }) {
       const [activeFloorIndex, setActiveFloorIndex] = useState(0);
-      const [isHovered, setIsHovered] = useState(false);
       const activeFloor = section.floors[activeFloorIndex];
 
       return (
         <div 
           className="w-full relative z-10 mt-12 md:mt-24 group/floor"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={() => setHoveredSceneBg && setHoveredSceneBg(section.overallPlan)}
+          onMouseLeave={() => setHoveredSceneBg && setHoveredSceneBg(null)}
         >
           <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
              <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
@@ -618,62 +617,31 @@
              </div>
           </div>
 
-          {/* 左侧悬浮出现的全局爆炸图底板 */}
-          <div className={`absolute left-[-10vw] top-12 w-[60vw] h-full z-0 pointer-events-none transition-all duration-700 ease-out flex items-center ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-             <img 
-               src={section.overallPlan} 
-               alt="Axonometric Background" 
-               className="w-full h-auto max-h-[80vh] object-contain filter drop-shadow-[0_0_40px_rgba(152,195,49,0.15)]"
-             />
-             {/* 保护右侧渲染图可读性的黑色渐变遮罩 */}
-             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#050505]/40 to-[#050505]"></div>
-          </div>
-
           {/* 前景操作与渲染区域：右侧布局 */}
           <div className="relative z-10 w-full flex flex-col md:flex-row items-stretch min-h-[500px] md:min-h-[60vh]">
             
-            {/* 左半区：完全透明，把视觉留给背后的爆炸图，仅放置按钮 */}
-            <div className="hidden md:flex w-4/12 lg:w-5/12 relative pointer-events-none">
-                {/* 楼层按钮，贴在内侧边缘 */}
-                <div className="absolute right-[-24px] top-1/2 -translate-y-1/2 flex flex-col-reverse gap-3 z-30 pointer-events-auto">
-                  {section.floors.map((floor, idx) => (
-                    <button
-                      key={floor.level}
-                      onClick={() => setActiveFloorIndex(idx)}
-                      className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center font-black font-sans text-lg border cursor-pointer transition-all duration-300 rounded-sm shadow-xl backdrop-blur-md ${
-                        activeFloorIndex === idx 
-                          ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_20px_rgba(152,195,49,0.6)] translate-x-2' 
-                          : 'bg-[#111] border-zinc-700 text-zinc-400 hover:text-[#98C331] hover:border-[#98C331]/80 hover:bg-black'
-                      }`}
-                    >
-                      {floor.level}
-                    </button>
-                  ))}
-                </div>
-            </div>
-
-            {/* 移动端专属的楼层按钮（顶部横向） */}
-            <div className="md:hidden w-full flex flex-row-reverse justify-center gap-4 mb-6 z-30">
-               {section.floors.map((floor, idx) => (
+            {/* 左侧：电梯导航按钮（移除了透明占位区块，更紧凑） */}
+            <div className="w-16 md:w-20 flex flex-col-reverse justify-center items-center gap-4 py-8 shrink-0 z-30 pointer-events-auto">
+                {section.floors.map((floor, idx) => (
                   <button
                     key={floor.level}
                     onClick={() => setActiveFloorIndex(idx)}
-                    className={`w-12 h-12 flex items-center justify-center font-black font-sans text-base border cursor-pointer transition-all duration-300 ${
+                    className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center font-black font-sans text-lg border cursor-pointer transition-all duration-300 rounded-sm shadow-xl backdrop-blur-md ${
                       activeFloorIndex === idx 
-                        ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_15px_rgba(152,195,49,0.6)]' 
-                        : 'bg-[#111] border-zinc-700 text-zinc-400'
+                        ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_20px_rgba(152,195,49,0.6)] translate-x-2' 
+                        : 'bg-[#111] border-zinc-700 text-zinc-400 hover:text-[#98C331] hover:border-[#98C331]/80 hover:bg-black'
                     }`}
                   >
                     {floor.level}
                   </button>
-               ))}
+                ))}
             </div>
 
-            {/* 右半区：主体功能与 16:9 渲染图集 */}
-            <div className="w-full md:w-8/12 lg:w-7/12 flex flex-col bg-[#0a0a0a] border border-zinc-800 shadow-2xl rounded-lg overflow-hidden ml-auto">
+            {/* 右侧：主体功能与 16:9 渲染图集 */}
+            <div className="w-full flex-1 flex flex-col bg-[#0a0a0a] border border-zinc-800 shadow-2xl rounded-lg overflow-hidden relative z-20">
               
               {/* 顶部楼层信息头部 */}
-              <div className="p-6 md:p-8 bg-gradient-to-r from-[#98C331]/10 to-transparent border-b border-zinc-800 pl-8 md:pl-12 shrink-0">
+              <div className="p-6 md:p-8 bg-gradient-to-r from-[#98C331]/10 to-transparent border-b border-zinc-800 shrink-0">
                 <div className="text-[#98C331] text-[10px] font-mono mb-2 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#98C331] animate-pulse"></span>
                     :/ ACTIVE_LAYER: {activeFloor.level}
@@ -699,17 +667,28 @@
               <div className="flex-1 w-full relative flex flex-col justify-center bg-black">
                 <div className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory h-full w-full">
                   {activeFloor.images.map((imgSrc, i) => (
-                    <div key={i} className="w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center bg-[#050505] p-4 md:p-8 aspect-video">
+                    <div 
+                      key={i} 
+                      className="w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center bg-[#050505] p-4 md:p-8 aspect-video"
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        if (setHoveredSceneBg) setHoveredSceneBg(imgSrc);
+                      }}
+                      onMouseLeave={(e) => {
+                        e.stopPropagation();
+                        if (setHoveredSceneBg) setHoveredSceneBg(section.overallPlan);
+                      }}
+                    >
                       <img 
                         src={imgSrc} 
                         alt={`${activeFloor.level} Render ${i + 1}`} 
-                        className="w-full h-full object-cover border border-zinc-800 shadow-xl"
+                        className="w-full h-full object-cover border border-zinc-800 shadow-xl opacity-90 hover:opacity-100 transition-opacity duration-300"
                         onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                       />
                       <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600">
                         <span>[RENDER_MISSING: {activeFloor.level}_{i+1}]</span>
                       </div>
-                      <div className="absolute bottom-8 left-8 bg-black/80 px-3 py-1.5 text-[10px] font-mono text-zinc-300 border border-zinc-700 backdrop-blur-sm rounded-sm">
+                      <div className="absolute bottom-8 left-8 bg-black/80 px-3 py-1.5 text-[10px] font-mono text-zinc-300 border border-zinc-700 backdrop-blur-sm rounded-sm pointer-events-none">
                         {String(i + 1).padStart(2, '0')} / {String(activeFloor.images.length).padStart(2, '0')}
                       </div>
                     </div>
@@ -844,7 +823,7 @@
     }
 
     // ==========================================
-    // 💡 左右分栏式：区位分析交互组件 (强制适配 16:9 左侧图片区域)
+    // 💡 区位分析交互组件 (修改为上下结构，适配 16:9 画幅)
     // ==========================================
     function ContextSlider({ section }) {
       const containerRef = useRef(null);
@@ -895,10 +874,11 @@
                 <span>&lt; SWIPE TO EXPLORE &gt;</span>
             </div>
           </div>
-          <div className="relative w-full flex flex-col md:flex-row shadow-2xl border border-zinc-800 bg-[#0a0a0a]">
+          
+          <div className="relative w-full flex flex-col shadow-2xl border border-zinc-800 bg-[#0a0a0a]">
             
-            {/* 左侧横向画廊：锁定为 aspect-video (16:9) */}
-            <div className="w-full md:w-2/3 relative overflow-hidden group/gallery border-b md:border-b-0 md:border-r border-zinc-800 aspect-video bg-black shrink-0">
+            {/* 顶部横向画廊：锁定为 aspect-video (16:9) 并满宽显示 */}
+            <div className="w-full relative overflow-hidden group/gallery border-b border-zinc-800 aspect-video bg-black shrink-0">
               <div 
                 ref={containerRef}
                 onScroll={handleScroll}
@@ -923,8 +903,8 @@
               </div>
             </div>
             
-            {/* 右侧文本内容 */}
-            <div className="w-full md:w-1/3 p-6 md:p-10 flex flex-col justify-center bg-[#0a0a0a]">
+            {/* 底部文本内容：文字排布在图片下方 */}
+            <div className="w-full p-6 md:p-8 flex flex-col justify-center bg-[#0a0a0a]">
               <div className="text-[#98C331] text-[10px] font-mono mb-2 flex items-center gap-2 shrink-0">
                   <span className="w-1.5 h-1.5 bg-[#98C331] animate-pulse"></span>
                   :/ DATA_ARCHIVE: 0{activeIndex + 1}
@@ -932,10 +912,10 @@
               <h4 className="text-white text-xl md:text-2xl font-bold mb-4 uppercase tracking-tighter shrink-0">
                   {section.items[activeIndex].title}
               </h4>
-              <div className="text-zinc-400 text-xs md:text-sm leading-relaxed text-justify whitespace-pre-wrap flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
+              <div className="text-zinc-400 text-xs md:text-sm leading-relaxed text-justify whitespace-pre-wrap">
                   {section.items[activeIndex].text}
               </div>
-              <div className="mt-4 pt-4 border-t border-zinc-800 flex justify-between items-center text-[10px] font-mono text-zinc-500 shrink-0">
+              <div className="mt-6 pt-4 border-t border-zinc-800 flex justify-between items-center text-[10px] font-mono text-zinc-500 shrink-0">
                   <button 
                     onClick={() => scrollTo(Math.max(0, activeIndex - 1))}
                     className={`hover:text-white transition-colors cursor-pointer ${activeIndex === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
@@ -1257,13 +1237,13 @@
             <CustomCursor />
             
             <div 
-              className={`fixed inset-0 z-[-1] pointer-events-none transition-opacity duration-700 ease-in-out ${hoveredSceneBg ? 'opacity-60' : 'opacity-0'}`}
+              className={`fixed inset-0 z-[-1] pointer-events-none transition-opacity duration-700 ease-in-out ${hoveredSceneBg ? 'opacity-50' : 'opacity-0'}`}
             >
               <div 
-                className={`absolute inset-0 bg-cover bg-center transition-transform duration-[10000ms] ease-out ${hoveredSceneBg ? 'scale-105' : 'scale-100'}`}
+                className={`absolute inset-0 bg-cover bg-center transition-transform duration-[10000ms] ease-out ${hoveredSceneBg ? 'scale-105' : 'scale-100'} filter blur-sm`}
                 style={{ backgroundImage: `url(${hoveredSceneBg || ''})` }} 
               />
-              <div className="absolute inset-0 bg-[#050505]/20 backdrop-blur-[2px]"></div>
+              <div className="absolute inset-0 bg-[#050505]/40 backdrop-blur-[2px]"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/10 to-[#050505]"></div>
             </div>
             
@@ -1508,7 +1488,8 @@
                         } else if (section.type === 'terrain-puzzle-flow') {
                           content = <TerrainPuzzleFlow section={section} />;
                         } else if (section.type === 'floor-plan-gallery') {
-                          content = <FloorPlanGallery section={section} />;
+                          // 💡 将 setHoveredSceneBg 传递给 FloorPlanGallery 组件
+                          content = <FloorPlanGallery section={section} setHoveredSceneBg={setHoveredSceneBg} />;
                         } else if (section.type === 'scene-map') {
                           content = (
                             <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
