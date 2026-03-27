@@ -46,20 +46,43 @@
         detailText: '《符号回廊》是一款基于虚拟现实技术的多人叙事体验游戏，它源自对数字时代交流异化的深刻反思。在当下，表情符号和简化的文字已成为情感表达的代名词，而身体本身丰富的语义潜力却在逐渐消退。该项目构建了一个无限的符号宇宙，灵感源自博尔赫斯的《巴别图书馆》。\n\n在游戏中，玩家彼此间成为隐形的“符号旅行者”。在这里，交流回归到其最根本的身体维度：通过仪式性的手势在环境中生成、替换和丢弃符号，玩家以异步、跨时间的方式共同改写世界的语义和叙事结构。这不仅仅是一款游戏，更是一场思想实验：当既定的符号系统失效时，我们的身体动作能否再次成为意义的源泉，在虚拟空间中谱写新的连接与理解的诗篇？',
         detailTextEn: 'Signless is a VR-based multiplayer narrative experience born from a deep reflection on the alienation of communication in the digital age. While emojis and simplified text have become shorthand for emotion, the rich semantic potential of the body itself is fading. This project constructs an infinite universe of symbols, inspired by Borges\' "Library of Babel."\n\nPlayers become invisible "Sign Voyagers" to one another. Here, communication returns to its most fundamental bodily dimension: through ritualistic gestures to generate, replace, and discard symbols within the environment, players collaboratively rewrite the world\'s semantics and narrative fabric in asynchronous, time-crossing collaboration. This is more than a game; it is a thought experiment: when established sign systems fail, can our physical gestures once again become the source of meaning, composing a new poetry of connection and understanding within virtual space?',
         extraSections: [
-          { id: 'q1', type: 'image', title: 'QUESTIONNAIRES', image: './images/signless-q.jpg', scrollable: false },
-          { id: 'b1', type: 'image', title: 'BRAINSTORMING', image: './images/signless-b.jpg', scrollable: false },
-          { id: 'f1', type: 'image', title: 'GAME FLOWCHART', image: './images/signless-f.jpg', scrollable: true },
-          // 💡 新增：复合游戏美术设计面板
+          // 💡 process-1.jpg 作为灵感来源长图
+          { id: 'p1', type: 'image', title: 'CONCEPT & INSPIRATION', image: './images/process-1.jpg', scrollable: true },
+          
+          // 💡 新增：你合并后的 16:9 前期调研与流程图
+          { id: 'r1', type: 'image', title: 'RESEARCH & FLOWCHART', image: './images/signless-research.jpg', scrollable: false },
+          
+          // 复合游戏美术设计面板
           { 
             id: 'm1', 
             type: 'scene-map', 
             title: 'ART DESIGN & SCENE LAYOUT', 
             centerMap: './images/signless-map.png', // 你的平面图png文件
             scenes: [
-              { name: '阿莱夫记忆库 (Aleph Memory Bank)', image: './images/scene-1.jpg' },
-              { name: '温室花园 (Greenhouse Garden)', image: './images/scene-2.jpg' },
-              { name: '记忆回廊 (Memory Corridor)', image: './images/scene-3.jpg' },
-              { name: '迷雾空间 (Mist Space)', image: './images/scene-4.jpg' }
+              { 
+                name: '阿莱夫记忆库 (Aleph Memory Bank)', 
+                image: './images/scene-1.jpg',
+                detailImage: './images/scene-1-process.jpg',
+                desc: '阿莱夫记忆库是游戏的新手引导区域。在这里玩家将学会基本的手势交互，并获得第一本符号残卷。空间设计上强调神圣感与失落文明的氛围，巨大的书架构成了迷宫般的物理阻碍。'
+              },
+              { 
+                name: '温室花园 (Greenhouse Garden)', 
+                image: './images/scene-2.jpg',
+                detailImage: './images/scene-2-process.jpg',
+                desc: '温室花园探讨了自然生命与人造符号之间的共生关系。玩家需要在这里通过特定的手势“催生”或“摧毁”植物，从而改变环境的地形并获取通关线索。'
+              },
+              { 
+                name: '记忆回廊 (Memory Corridor)', 
+                image: './images/scene-3.jpg',
+                detailImage: './images/scene-3-process.jpg',
+                desc: '这是一条连接不同时间线维度的走廊。其他玩家过去的虚影会在这里以“符号轨迹”的形式重现。美术设计上采用了扭曲的透视与大量的镜面反射。'
+              },
+              { 
+                name: '迷雾空间 (Mist Space)', 
+                image: './images/scene-4.jpg',
+                detailImage: './images/scene-4-process.jpg',
+                desc: '迷雾空间是整个游戏的隐藏深层区域。当既定的符号系统完全失效后，玩家将进入这里。只有通过未经定义的、最原始的身体动作才能拨开迷雾，触及游戏的核心真相。'
+              }
             ] 
           }
         ]
@@ -309,6 +332,10 @@
       const [filter, setFilter] = useState('All');
       const [selectedProject, setSelectedProject] = useState(null);
       const [isDetailMuted, setIsDetailMuted] = useState(true);
+      
+      // 💡 新增：用于跟踪当前被点击、需要全屏放大的具体场景
+      const [activeSceneModal, setActiveSceneModal] = useState(null);
+      
       const detailVideoRef = useRef(null);
 
       const filteredProjects = filter === 'All' 
@@ -327,6 +354,7 @@
       useEffect(() => {
         window.scrollTo(0, 0);
         setIsDetailMuted(true);
+        setActiveSceneModal(null); // 切换项目时重置弹窗
       }, [selectedProject]);
 
       useEffect(() => {
@@ -340,6 +368,49 @@
         return (
           <div className="min-h-screen font-mono selection:bg-white selection:text-black relative bg-[#050505] z-50">
             <CustomCursor /> {/* 详情页注入光标 */}
+            
+            {/* 💡 新增：全屏极客风场景详情弹窗 */}
+            {activeSceneModal && (
+              <div className="fixed inset-0 z-[80000] flex items-center justify-center p-4 md:p-12 bg-black/90 backdrop-blur-md transition-all">
+                <div className="relative w-full max-w-6xl bg-[#111] border border-zinc-700 shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in duration-300">
+                  <button 
+                    onClick={() => setActiveSceneModal(null)} 
+                    className="absolute top-4 right-4 z-10 text-zinc-400 hover:text-white font-mono text-xs uppercase bg-black/50 px-3 py-1.5 border border-zinc-700 cursor-pointer backdrop-blur-sm transition-colors"
+                  >
+                    [X] CLOSE
+                  </button>
+                  
+                  {/* 左侧：详细的过程图或大场景图 */}
+                  <div className="w-full md:w-2/3 h-[40vh] md:h-[70vh] bg-black relative border-b md:border-b-0 md:border-r border-zinc-800 flex items-center justify-center">
+                    <img 
+                      src={activeSceneModal.detailImage || activeSceneModal.image} 
+                      alt={activeSceneModal.name} 
+                      className="w-full h-full object-contain p-2" 
+                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                    />
+                    <div className="absolute inset-0 hidden flex-col items-center justify-center text-zinc-600 font-mono text-xs opacity-50">
+                      <span>[IMAGE_NOT_FOUND]</span>
+                      <span>REQ: {activeSceneModal.detailImage}</span>
+                    </div>
+                  </div>
+                  
+                  {/* 右侧：档案介绍文字 */}
+                  <div className="w-full md:w-1/3 p-6 md:p-10 flex flex-col bg-[#0a0a0a]">
+                    <div className="text-[10px] text-cyan-500 font-mono tracking-widest mb-4 flex items-center gap-2">
+                      <span className="w-2 h-2 bg-cyan-500 animate-pulse"></span>
+                      :/ SCENE_DATA_ARCHIVE
+                    </div>
+                    <h3 className="font-sans font-black text-2xl md:text-3xl uppercase text-white mb-6 tracking-tighter">
+                      {activeSceneModal.name}
+                    </h3>
+                    <div className="text-sm text-zinc-400 leading-relaxed font-sans text-justify whitespace-pre-wrap overflow-y-auto pr-2 custom-scrollbar">
+                      {activeSceneModal.desc || 'System Note: No detailed records found in the archive for this zone.'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <header className="w-full p-6 md:p-8 flex justify-between items-start z-40">
               <button 
                 onClick={() => setSelectedProject(null)}
@@ -433,20 +504,27 @@
                   {/* --- 动态渲染额外的内容板块 --- */}
                   {selectedProject.extraSections && selectedProject.extraSections.map((section, idx) => {
                     
-                    // 💡 新增逻辑：专门渲染 "scene-map" (场景与中心平面图) 模块
+                    // 专门渲染 "scene-map" (场景与中心平面图) 模块
                     if (section.type === 'scene-map') {
                       return (
                         <div key={section.id || idx} className="mt-12 md:mt-20 w-full">
                           <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
                             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
+                            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse">
+                              [ CLICK TO EXPLORE ]
+                            </div>
                           </div>
                           
                           <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
                             
-                            {/* 背景：2x2的场景图网格阵列 */}
-                            <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-40 group-hover:opacity-80 transition-opacity duration-700">
+                            {/* 背景：2x2的场景图网格阵列，增加了点击事件 */}
+                            <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
                               {section.scenes.map((scene, i) => (
-                                <div key={i} className="relative w-full h-full overflow-hidden bg-black group/scene">
+                                <div 
+                                  key={i} 
+                                  onClick={() => setActiveSceneModal(scene)}
+                                  className="relative w-full h-full overflow-hidden bg-black group/scene cursor-pointer"
+                                >
                                   <img 
                                     src={scene.image} 
                                     alt={scene.name} 
@@ -458,8 +536,8 @@
                                     <span className="text-zinc-600 text-[10px] font-mono opacity-50">[SCENE_{i+1}]</span>
                                   </div>
                                   {/* 左下角小标签 */}
-                                  <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-[8px] md:text-[10px] font-bold tracking-widest text-white/50 group-hover/scene:text-white uppercase drop-shadow-md z-10 transition-colors bg-black/40 px-2 py-1 backdrop-blur-sm rounded-sm">
-                                    {scene.name}
+                                  <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-[8px] md:text-[10px] font-bold tracking-widest text-white/50 group-hover/scene:text-white uppercase drop-shadow-md z-10 transition-colors bg-black/60 px-2 py-1 backdrop-blur-sm border border-zinc-700 group-hover/scene:border-white">
+                                    {scene.name} &gt;
                                   </div>
                                 </div>
                               ))}
@@ -467,7 +545,7 @@
                             
                             {/* 中央：悬浮全息地图 (PNG) */}
                             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                              <div className="relative w-1/2 md:w-1/3 max-w-[400px] pointer-events-auto cursor-pointer hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+                              <div className="relative w-1/2 md:w-1/3 max-w-[400px] hover:scale-110 transition-transform duration-700 filter drop-shadow-[0_0_40px_rgba(0,0,0,0.9)]">
                                  <img 
                                    src={section.centerMap} 
                                    alt="Central Floor Plan" 
