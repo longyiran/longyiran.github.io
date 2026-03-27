@@ -46,42 +46,111 @@
         detailText: '《符号回廊》是一款基于虚拟现实技术的多人叙事体验游戏，它源自对数字时代交流异化的深刻反思。在当下，表情符号和简化的文字已成为情感表达的代名词，而身体本身丰富的语义潜力却在逐渐消退。该项目构建了一个无限的符号宇宙，灵感源自博尔赫斯的《巴别图书馆》。\n\n在游戏中，玩家彼此间成为隐形的“符号旅行者”。在这里，交流回归到其最根本的身体维度：通过仪式性的手势在环境中生成、替换和丢弃符号，玩家以异步、跨时间的方式共同改写世界的语义和叙事结构。这不仅仅是一款游戏，更是一场思想实验：当既定的符号系统失效时，我们的身体动作能否再次成为意义的源泉，在虚拟空间中谱写新的连接与理解的诗篇？',
         detailTextEn: 'Signless is a VR-based multiplayer narrative experience born from a deep reflection on the alienation of communication in the digital age. While emojis and simplified text have become shorthand for emotion, the rich semantic potential of the body itself is fading. This project constructs an infinite universe of symbols, inspired by Borges\' "Library of Babel."\n\nPlayers become invisible "Sign Voyagers" to one another. Here, communication returns to its most fundamental bodily dimension: through ritualistic gestures to generate, replace, and discard symbols within the environment, players collaboratively rewrite the world\'s semantics and narrative fabric in asynchronous, time-crossing collaboration. This is more than a game; it is a thought experiment: when established sign systems fail, can our physical gestures once again become the source of meaning, composing a new poetry of connection and understanding within virtual space?',
         extraSections: [
-          // 💡 process-1.jpg 作为灵感来源长图
-          { id: 'p1', type: 'image', title: 'CONCEPT & INSPIRATION', image: './images/process-1.jpg', scrollable: true },
-          
-          // 💡 新增：你合并后的 16:9 前期调研与流程图
+          // 💡 改动 1：修改 scrollable 为 false，宽度100%铺满展示
+          { id: 'p1', type: 'image', title: 'CONCEPT & INSPIRATION', image: './images/process-1.jpg', scrollable: false },
           { id: 'r1', type: 'image', title: 'RESEARCH & FLOWCHART', image: './images/signless-research.jpg', scrollable: false },
-          
-          // 复合游戏美术设计面板
           { 
             id: 'm1', 
             type: 'scene-map', 
             title: 'ART DESIGN & SCENE LAYOUT', 
-            centerMap: './images/signless-map.png', // 你的平面图png文件
+            centerMap: './images/signless-map.png', 
             scenes: [
               { 
                 name: '阿莱夫记忆库 (Aleph Memory Bank)', 
                 image: './images/scene-1.jpg',
-                detailImage: './images/scene-1-process.jpg',
-                desc: '阿莱夫记忆库是游戏的新手引导区域。在这里玩家将学会基本的手势交互，并获得第一本符号残卷。空间设计上强调神圣感与失落文明的氛围，巨大的书架构成了迷宫般的物理阻碍。'
+                // 💡 改动 2：增加了第四张过程图
+                detailImages: [
+                  './images/scene-1-process-1.jpg',
+                  './images/scene-1-process-2.jpg',
+                  './images/scene-1-process-3.jpg',
+                  './images/scene-1-process-4.jpg' 
+                ],
+                desc: (
+                  <div className="space-y-6">
+                    <div>
+                      <div className="text-white font-bold text-[11px] mb-2 uppercase tracking-widest flex items-center gap-2">
+                        <span className="w-1 h-1 bg-cyan-500"></span>
+                        灵感溯源：博尔赫斯《巴别图书馆》
+                      </div>
+                      <div className="text-zinc-500 text-xs italic mb-2 font-mono">"无限路径与迷宫 → 无限分岔的叙事"</div>
+                      <p>阿莱夫记忆库是一座失落的古老图书馆，亦是整个游戏维度的起点与核心锚点。在语言符号过度数字化、手势语义学濒临消亡的末法时代，这座图书馆化身为<span className="text-zinc-200 font-bold">“符号的庇护所”</span>，静静封存着人类运动符号的最后基因。</p>
+                      <p className="mt-2">玩家将在此地首次通过真实的物理动作生成空间符号，正式开启属于自己的“空白之书”。周遭漂浮的每一枚符号碎片，不仅是玩家当下的回音，更是无数前代旅行者在时空中不可磨灭的拓扑痕迹。</p>
+                    </div>
+                    
+                    <div className="border-l border-zinc-700 pl-4 relative">
+                      <div className="text-white font-bold text-[10px] mb-1 tracking-widest uppercase">:/ ZONE_01: 书架迷宫 (Labyrinth of Tomes)</div>
+                      <p className="text-xs text-zinc-400">高耸入云的巨型书架构筑成类似八卦阵的深邃迷宫。它不仅是物理层面的空间解谜屏障，更在隐喻上象征着人类知识、记忆与符号在时间长河中的无限分岔与重构。</p>
+                    </div>
+
+                    <div className="border-l border-cyan-900 pl-4 relative">
+                      <div className="text-cyan-400 font-bold text-[10px] mb-1 tracking-widest uppercase">:/ ZONE_02: 能量汇聚柱 (Energy Pillar)</div>
+                      <p className="text-xs text-zinc-400 mb-4">矗立于迷宫绝对中心的能量锚点，作为全维度信息与玩家动作信号的终极汇聚站。其四周漂浮环绕着“上一个文明遗留的璀璨符号线索”，指引玩家探寻失落的真义。</p>
+                      <div className="bg-[#050505] border border-zinc-800 p-3 inline-block relative group/img cursor-crosshair">
+                        <img 
+                          src="./images/energy-pillar.png" 
+                          alt="Energy Pillar Asset" 
+                          className="w-32 md:w-40 h-auto object-contain filter drop-shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+                          onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                        />
+                        <div className="absolute inset-0 hidden items-center justify-center text-[8px] text-zinc-600 font-mono">[PNG_MISSING]</div>
+                        <div className="absolute inset-0 border border-cyan-500/0 group-hover/img:border-cyan-500/40 transition-colors pointer-events-none"></div>
+                        <div className="absolute bottom-1 right-1 text-[8px] text-cyan-700 font-mono">ASSET_ID: PILLAR</div>
+                      </div>
+                    </div>
+                  </div>
+                )
               },
               { 
                 name: '温室花园 (Greenhouse Garden)', 
                 image: './images/scene-2.jpg',
-                detailImage: './images/scene-2-process.jpg',
+                detailImages: [
+                  './images/scene-2-process-1.jpg',
+                  './images/scene-2-process-2.jpg',
+                  './images/scene-2-process-3.jpg'
+                ],
                 desc: '温室花园探讨了自然生命与人造符号之间的共生关系。玩家需要在这里通过特定的手势“催生”或“摧毁”植物，从而改变环境的地形并获取通关线索。'
               },
               { 
                 name: '记忆回廊 (Memory Corridor)', 
                 image: './images/scene-3.jpg',
-                detailImage: './images/scene-3-process.jpg',
+                detailImages: [
+                  './images/scene-3-process-1.jpg',
+                  './images/scene-3-process-2.jpg',
+                  './images/scene-3-process-3.jpg'
+                ],
                 desc: '这是一条连接不同时间线维度的走廊。其他玩家过去的虚影会在这里以“符号轨迹”的形式重现。美术设计上采用了扭曲的透视与大量的镜面反射。'
               },
               { 
                 name: '迷雾空间 (Mist Space)', 
                 image: './images/scene-4.jpg',
-                detailImage: './images/scene-4-process.jpg',
-                desc: '迷雾空间是整个游戏的隐藏深层区域。当既定的符号系统完全失效后，玩家将进入这里。只有通过未经定义的、最原始的身体动作才能拨开迷雾，触及游戏的核心真相。'
+                detailImages: [
+                  './images/scene-4-process-1.jpg',
+                  './images/scene-4-process-2.jpg',
+                  './images/scene-4-process-3.jpg'
+                ],
+                // 💡 改动 3：为迷雾空间增加了带有 PNG 资产显示的排版
+                desc: (
+                  <div className="space-y-6">
+                    <div>
+                      <p>迷雾空间是整个游戏的隐藏深层区域。当既定的符号系统完全失效后，玩家将进入这里。只有通过未经定义的、最原始的身体动作才能拨开迷雾，触及游戏的核心真相。</p>
+                    </div>
+                    <div className="border-l border-purple-900 pl-4 relative">
+                      <div className="text-purple-400 font-bold text-[10px] mb-1 tracking-widest uppercase">:/ HIDDEN_ASSET: 迷雾核心 (Mist Core)</div>
+                      <p className="text-xs text-zinc-400 mb-4">在迷雾深处隐约闪烁的未知结晶体，它不再受限于任何已知的符号法则，代表了纯粹的语义潜能。</p>
+                      <div className="bg-[#050505] border border-zinc-800 p-3 inline-block relative group/img cursor-crosshair">
+                        <img 
+                          src="./images/scene-4-asset.png" 
+                          alt="Mist Core Asset" 
+                          className="w-32 md:w-40 h-auto object-contain filter drop-shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+                          onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                        />
+                        <div className="absolute inset-0 hidden items-center justify-center text-[8px] text-zinc-600 font-mono">[PNG_MISSING]</div>
+                        <div className="absolute inset-0 border border-purple-500/0 group-hover/img:border-purple-500/40 transition-colors pointer-events-none"></div>
+                        <div className="absolute bottom-1 right-1 text-[8px] text-purple-700 font-mono">ASSET_ID: MIST_CORE</div>
+                      </div>
+                    </div>
+                  </div>
+                )
               }
             ] 
           }
@@ -333,8 +402,9 @@
       const [selectedProject, setSelectedProject] = useState(null);
       const [isDetailMuted, setIsDetailMuted] = useState(true);
       
-      // 💡 新增：用于跟踪当前被点击、需要全屏放大的具体场景
       const [activeSceneModal, setActiveSceneModal] = useState(null);
+      // 💡 状态追踪：当前鼠标悬浮的场景图片
+      const [hoveredSceneBg, setHoveredSceneBg] = useState(null);
       
       const detailVideoRef = useRef(null);
 
@@ -354,7 +424,8 @@
       useEffect(() => {
         window.scrollTo(0, 0);
         setIsDetailMuted(true);
-        setActiveSceneModal(null); // 切换项目时重置弹窗
+        setActiveSceneModal(null);
+        setHoveredSceneBg(null);
       }, [selectedProject]);
 
       useEffect(() => {
@@ -366,36 +437,75 @@
       // ========== 视图 B：项目详情页 ==========
       if (selectedProject) {
         return (
-          <div className="min-h-screen font-mono selection:bg-white selection:text-black relative bg-[#050505] z-50">
+          <div className={`min-h-screen font-mono selection:bg-white selection:text-black relative z-50 transition-colors duration-1000 ${hoveredSceneBg ? 'bg-transparent' : 'bg-[#050505]'}`}>
             <CustomCursor /> {/* 详情页注入光标 */}
+
+            {/* 💡 沉浸式动态背景层 */}
+            <div 
+              className={`fixed inset-0 z-[-1] pointer-events-none transition-opacity duration-700 ease-in-out ${hoveredSceneBg ? 'opacity-30' : 'opacity-0'}`}
+            >
+              <div 
+                className={`absolute inset-0 bg-cover bg-center transition-transform duration-10000 ease-out ${hoveredSceneBg ? 'scale-105' : 'scale-100'}`}
+                style={{ backgroundImage: `url(${hoveredSceneBg || ''})` }} 
+              />
+              <div className="absolute inset-0 bg-[#050505]/40 backdrop-blur-[2px]"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-[#050505]"></div>
+            </div>
             
-            {/* 💡 新增：全屏极客风场景详情弹窗 */}
+            {/* 💡 全屏极客风场景详情弹窗 */}
             {activeSceneModal && (
               <div className="fixed inset-0 z-[80000] flex items-center justify-center p-4 md:p-12 bg-black/90 backdrop-blur-md transition-all">
-                <div className="relative w-full max-w-6xl bg-[#111] border border-zinc-700 shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in duration-300">
+                <div className="relative w-full max-w-7xl h-[85vh] md:h-[80vh] bg-[#111] border border-zinc-700 shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in duration-300">
                   <button 
                     onClick={() => setActiveSceneModal(null)} 
-                    className="absolute top-4 right-4 z-10 text-zinc-400 hover:text-white font-mono text-xs uppercase bg-black/50 px-3 py-1.5 border border-zinc-700 cursor-pointer backdrop-blur-sm transition-colors"
+                    className="absolute top-4 right-4 z-50 text-zinc-400 hover:text-white font-mono text-xs uppercase bg-black/50 px-3 py-1.5 border border-zinc-700 cursor-pointer backdrop-blur-sm transition-colors shadow-lg"
                   >
                     [X] CLOSE
                   </button>
                   
-                  {/* 左侧：详细的过程图或大场景图 */}
-                  <div className="w-full md:w-2/3 h-[40vh] md:h-[70vh] bg-black relative border-b md:border-b-0 md:border-r border-zinc-800 flex items-center justify-center">
-                    <img 
-                      src={activeSceneModal.detailImage || activeSceneModal.image} 
-                      alt={activeSceneModal.name} 
-                      className="w-full h-full object-contain p-2" 
-                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                    />
-                    <div className="absolute inset-0 hidden flex-col items-center justify-center text-zinc-600 font-mono text-xs opacity-50">
-                      <span>[IMAGE_NOT_FOUND]</span>
-                      <span>REQ: {activeSceneModal.detailImage}</span>
-                    </div>
+                  {/* 左侧：详细的过程图或大场景图 (支持多张图片垂直滚动) */}
+                  <div className="w-full md:w-3/5 h-1/2 md:h-full bg-black relative border-b md:border-b-0 md:border-r border-zinc-800 overflow-y-auto hide-scrollbar flex flex-col p-4 gap-6 scroll-smooth">
+                    {activeSceneModal.detailImages && activeSceneModal.detailImages.length > 0 ? (
+                      activeSceneModal.detailImages.map((imgSrc, idx) => (
+                        <div key={idx} className="relative w-full border border-zinc-800/50 bg-[#050505] p-1">
+                          <img 
+                            src={imgSrc} 
+                            alt={`${activeSceneModal.name} detail ${idx + 1}`} 
+                            className="w-full h-auto object-contain" 
+                            onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                          />
+                          <div className="absolute inset-0 hidden flex-col items-center justify-center text-zinc-600 font-mono text-xs opacity-50">
+                            <span>[IMG_NOT_FOUND]</span>
+                            <span>{imgSrc}</span>
+                          </div>
+                          {/* 图片标号 */}
+                          <div className="absolute top-2 left-2 text-[8px] font-mono text-zinc-500 bg-black/80 px-1">IMG_{idx+1}</div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <img 
+                          src={activeSceneModal.image} 
+                          alt={activeSceneModal.name} 
+                          className="w-full h-full object-contain p-2" 
+                          onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                        />
+                        <div className="absolute inset-0 hidden flex-col items-center justify-center text-zinc-600 font-mono text-xs opacity-50">
+                          <span>[SCENE_IMG_NOT_FOUND]</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* 滚动提示 */}
+                    {activeSceneModal.detailImages && activeSceneModal.detailImages.length > 1 && (
+                      <div className="sticky bottom-2 mx-auto mt-auto text-[10px] text-cyan-500 font-mono tracking-widest bg-black/80 px-3 py-1 border border-zinc-800 pointer-events-none animate-pulse z-10 w-fit backdrop-blur-sm">
+                        ↓ SCROLL FOR MORE IMAGES
+                      </div>
+                    )}
                   </div>
                   
-                  {/* 右侧：档案介绍文字 */}
-                  <div className="w-full md:w-1/3 p-6 md:p-10 flex flex-col bg-[#0a0a0a]">
+                  {/* 右侧：档案介绍文字 (兼容字符串与 React 节点富文本) */}
+                  <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 md:p-10 flex flex-col bg-[#0a0a0a] overflow-y-auto custom-scrollbar">
                     <div className="text-[10px] text-cyan-500 font-mono tracking-widest mb-4 flex items-center gap-2">
                       <span className="w-2 h-2 bg-cyan-500 animate-pulse"></span>
                       :/ SCENE_DATA_ARCHIVE
@@ -403,7 +513,9 @@
                     <h3 className="font-sans font-black text-2xl md:text-3xl uppercase text-white mb-6 tracking-tighter">
                       {activeSceneModal.name}
                     </h3>
-                    <div className="text-sm text-zinc-400 leading-relaxed font-sans text-justify whitespace-pre-wrap overflow-y-auto pr-2 custom-scrollbar">
+                    
+                    {/* 判断并渲染：如果是字符串则用原排版，如果是组件直接渲染 */}
+                    <div className="text-sm text-zinc-400 leading-relaxed font-sans text-justify whitespace-pre-wrap flex-1">
                       {activeSceneModal.desc || 'System Note: No detailed records found in the archive for this zone.'}
                     </div>
                   </div>
@@ -511,18 +623,20 @@
                           <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
                             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
                             <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse">
-                              [ CLICK TO EXPLORE ]
+                              [ HOVER & CLICK ]
                             </div>
                           </div>
                           
                           <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
                             
-                            {/* 背景：2x2的场景图网格阵列，增加了点击事件 */}
+                            {/* 💡 背景：2x2场景网格阵列，增加了 onMouseEnter 事件改变全局背景 */}
                             <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
                               {section.scenes.map((scene, i) => (
                                 <div 
                                   key={i} 
                                   onClick={() => setActiveSceneModal(scene)}
+                                  onMouseEnter={() => setHoveredSceneBg(scene.image)}
+                                  onMouseLeave={() => setHoveredSceneBg(null)}
                                   className="relative w-full h-full overflow-hidden bg-black group/scene cursor-pointer"
                                 >
                                   <img 
@@ -531,11 +645,9 @@
                                     className="w-full h-full object-cover grayscale opacity-70 group-hover/scene:grayscale-0 group-hover/scene:opacity-100 group-hover/scene:scale-105 transition-all duration-700" 
                                     onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                                   />
-                                  {/* 找不到图时的容错占位 */}
                                   <div className="absolute inset-0 hidden items-center justify-center bg-[#111]">
                                     <span className="text-zinc-600 text-[10px] font-mono opacity-50">[SCENE_{i+1}]</span>
                                   </div>
-                                  {/* 左下角小标签 */}
                                   <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-[8px] md:text-[10px] font-bold tracking-widest text-white/50 group-hover/scene:text-white uppercase drop-shadow-md z-10 transition-colors bg-black/60 px-2 py-1 backdrop-blur-sm border border-zinc-700 group-hover/scene:border-white">
                                     {scene.name} &gt;
                                   </div>
@@ -564,28 +676,19 @@
                       );
                     }
 
-                    // 默认逻辑：渲染普通图表 (保留之前的完美适配与滑动功能)
+                    // 默认逻辑：渲染普通图表 (去除了 scrollable，宽度自动100%铺满)
                     return (
-                      <div key={section.id || idx} className="mt-12 md:mt-20 w-full">
+                      <div key={section.id || idx} className="mt-12 md:mt-20 w-full relative z-10">
                         <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
                           <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                          {section.scrollable && (
-                            <div className="text-[10px] text-cyan-500 tracking-widest uppercase flex items-center gap-2 animate-pulse">
-                              <span>&lt; SCROLL &gt;</span>
-                            </div>
-                          )}
                         </div>
                         
                         <div className="w-full bg-[#111] border border-zinc-800 relative p-1 overflow-hidden group">
-                          <div className={`relative z-10 ${section.scrollable ? 'overflow-x-auto hide-scrollbar cursor-ew-resize' : 'flex justify-center'}`}>
+                          <div className="relative z-10 flex justify-center">
                             <img 
                               src={section.image} 
                               alt={section.title} 
-                              className={`opacity-90 grayscale hover:grayscale-0 transition-all duration-700 block ${
-                                section.scrollable 
-                                  ? 'h-[400px] md:h-[600px] w-auto max-w-none cursor-pointer' 
-                                  : 'w-full h-auto object-contain'
-                              }`}
+                              className="opacity-90 grayscale hover:grayscale-0 transition-all duration-700 block w-full h-auto object-contain"
                               onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                             />
                             <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0 min-w-full">
@@ -594,15 +697,6 @@
                               </span>
                             </div>
                           </div>
-                          
-                          {section.scrollable && (
-                            <div className="absolute bottom-4 right-4 bg-black/80 border border-zinc-700 text-zinc-300 text-[10px] px-3 py-1.5 font-mono tracking-widest pointer-events-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 z-20 backdrop-blur-sm shadow-xl">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                              </svg>
-                              SLIDE TO EXPLORE
-                            </div>
-                          )}
                         </div>
                       </div>
                     );
@@ -617,7 +711,7 @@
 
       // ========== 视图 A：主页列表 ==========
       return (
-        <div className="min-h-screen font-mono selection:bg-white selection:text-black relative overflow-x-hidden">
+        <div className="min-h-screen font-mono selection:bg-white selection:text-black relative overflow-x-hidden bg-[#050505]">
           <CustomCursor /> {/* 首页注入光标 */}
           
           <header className="fixed top-0 w-full p-6 md:p-8 flex justify-between items-start z-40 pointer-events-none">
