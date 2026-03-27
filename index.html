@@ -28,11 +28,11 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-    /* 横向画廊自定义滚动条 */
+    /* 横向画廊自定义滚动条 (修改为橙色悬浮) */
     .gallery-scroll::-webkit-scrollbar { height: 4px; display: block; }
     .gallery-scroll::-webkit-scrollbar-track { background: #111; }
     .gallery-scroll::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
-    .gallery-scroll::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+    .gallery-scroll::-webkit-scrollbar-thumb:hover { background: #f97316; }
     
     .project-card:hover .img-container { transform: scale(0.98); }
     .img-container { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -457,7 +457,7 @@
     }
 
     // ==========================================
-    // 💡 增强型横向画廊组件 (Cover Flow 景深放大效果)
+    // 💡 增强型横向画廊组件 (Cover Flow 景深放大与橙色主题效果)
     // ==========================================
     function EnhancedHorizontalGallery({ section }) {
       const containerRef = useRef(null);
@@ -493,12 +493,13 @@
         <div className="mt-12 md:mt-24 w-full relative z-10 group">
           <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
+            <div className="text-[10px] text-orange-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
                 <span>&lt; SWIPE TO EXPLORE &gt;</span>
             </div>
           </div>
           
-          <div className="w-full bg-[#0a0a0a] border border-zinc-800 py-6 md:py-10 relative shadow-2xl overflow-hidden">
+          {/* group/gallery 用于捕获鼠标悬浮，触发内部图片的连动放大特效 */}
+          <div className="w-full bg-[#0a0a0a] border border-zinc-800 py-6 md:py-10 relative shadow-2xl overflow-hidden group/gallery">
             <div 
               ref={containerRef}
               onScroll={handleScroll}
@@ -508,19 +509,19 @@
                 <div 
                   key={i} 
                   className={`min-w-[85%] md:min-w-[60%] h-full flex-shrink-0 snap-center relative border border-zinc-800 bg-black cursor-ew-resize overflow-hidden transition-all duration-500 ease-out ${
-                    activeIndex === i ? 'scale-100 opacity-100 shadow-[0_0_40px_rgba(6,182,212,0.15)] z-20' : 'scale-[0.85] opacity-30 z-10'
+                    activeIndex === i ? 'scale-100 group-hover/gallery:scale-[1.02] opacity-100 shadow-[0_0_40px_rgba(249,115,22,0.2)] z-20' : 'scale-[0.85] group-hover/gallery:scale-[0.88] opacity-30 group-hover/gallery:opacity-60 z-10'
                   }`}
                 >
                    <img 
                       src={img.src} 
                       alt={img.alt} 
-                      className={`w-full h-full object-contain transition-transform duration-1000 ${activeIndex === i ? 'scale-105' : 'scale-100'}`}
+                      className={`w-full h-full object-contain transition-transform duration-1000 ${activeIndex === i ? 'scale-105 group-hover/gallery:scale-110' : 'scale-100 group-hover/gallery:scale-105'}`}
                       onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                    />
                    <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600">
                       <span>[IMG_MISSING: {img.src}]</span>
                    </div>
-                   <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-cyan-500/50 text-cyan-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10`}>
+                   <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-orange-500/50 text-orange-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10`}>
                       {String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}
                    </div>
                 </div>
@@ -564,7 +565,7 @@
       }, []);
 
       return (
-        <div className="mt-12 md:mt-24 w-full relative z-10">
+        <div className="mt-12 md:mt-24 w-full relative z-10 group">
           <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
             <div className="text-[10px] text-green-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
@@ -572,7 +573,7 @@
             </div>
           </div>
           
-          <div className="w-full relative py-4">
+          <div className="w-full relative py-4 group/gallery">
             <div 
               ref={containerRef}
               onScroll={handleScroll}
@@ -582,14 +583,14 @@
                 <div 
                   key={card.id} 
                   className={`min-w-[85%] md:min-w-[45%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border transition-all duration-500 ease-out cursor-ew-resize ${
-                    activeIndex === i ? 'border-green-500/40 scale-100 opacity-100 shadow-[0_0_30px_rgba(34,197,94,0.1)] z-20' : 'border-zinc-800 scale-90 opacity-40 z-10'
+                    activeIndex === i ? 'border-green-500/40 group-hover/gallery:scale-[1.02] scale-100 opacity-100 shadow-[0_0_30px_rgba(34,197,94,0.1)] z-20' : 'border-zinc-800 scale-90 group-hover/gallery:scale-[0.93] group-hover/gallery:opacity-60 opacity-40 z-10'
                   }`}
                 >
                    <div className="w-full aspect-[16/9] relative overflow-hidden bg-black border-b border-zinc-800">
                      <img 
                         src={card.image} 
                         alt={card.title} 
-                        className={`w-full h-full object-cover transition-transform duration-1000 ${activeIndex === i ? 'scale-105' : 'scale-100'}`}
+                        className={`w-full h-full object-cover transition-transform duration-1000 ${activeIndex === i ? 'scale-105 group-hover/gallery:scale-110' : 'scale-100 group-hover/gallery:scale-105'}`}
                         onError={(e) => { e.target.style.display='none'; }}
                      />
                    </div>
@@ -1097,7 +1098,7 @@
                   {/* --- 动态渲染额外的内容板块 --- */}
                   {selectedProject.extraSections && selectedProject.extraSections.map((section, idx) => {
                     
-                    // 💡 新增：定制化的“主题与概念深化”图文穿插排版
+                    // 💡 修改：橙绿配色的主题与概念深化排版
                     if (section.type === 'theme-deepening') {
                       return (
                         <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
@@ -1105,13 +1106,12 @@
                             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
                           </div>
                           <div className="relative p-8 md:p-16 bg-gradient-to-br from-[#111] to-[#050505] border border-zinc-800 overflow-hidden group">
-                            {/* 顶部与底部的赛博发光线条 */}
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-600 to-transparent"></div>
-                            <div className="absolute bottom-0 right-0 w-1/3 h-1 bg-gradient-to-l from-purple-600 to-transparent"></div>
+                            {/* 顶部橙色、底部绿色的发光线条 */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-transparent"></div>
+                            <div className="absolute bottom-0 right-0 w-1/3 h-1 bg-gradient-to-l from-green-500 to-transparent"></div>
                             
-                            {/* 悬浮的说明性 PNG 小图 */}
                             <div className="absolute right-[-5%] bottom-0 md:right-10 md:bottom-10 opacity-30 md:opacity-70 transition-transform duration-1000 group-hover:scale-105 group-hover:opacity-100 pointer-events-none">
-                              <img src={section.pngAsset} alt="Theme Asset" className="w-48 md:w-80 h-auto object-contain filter drop-shadow-[0_0_25px_rgba(6,182,212,0.4)]" onError={(e) => { e.target.style.display='none'; }}/>
+                              <img src={section.pngAsset} alt="Theme Asset" className="w-48 md:w-80 h-auto object-contain filter drop-shadow-[0_0_25px_rgba(249,115,22,0.4)]" onError={(e) => { e.target.style.display='none'; }}/>
                             </div>
 
                             <div className="relative z-10 space-y-10 md:w-3/4">
@@ -1122,8 +1122,8 @@
                                   </h3>
                                 ))}
                               </div>
-                              <div className="pl-6 border-l-4 border-cyan-700 bg-cyan-900/5 p-4 backdrop-blur-sm">
-                                <h4 className="text-cyan-400 font-bold text-lg mb-4 tracking-widest">{section.statementTitle}</h4>
+                              <div className="pl-6 border-l-4 border-orange-600 bg-orange-900/10 p-4 backdrop-blur-sm">
+                                <h4 className="text-orange-400 font-bold text-lg mb-4 tracking-widest">{section.statementTitle}</h4>
                                 <div className="text-zinc-300 text-sm md:text-base leading-loose whitespace-pre-wrap font-sans">
                                   {section.statement}
                                 </div>
@@ -1134,7 +1134,7 @@
                       );
                     }
 
-                    // 概念文字排版
+                    // 💡 修改：概念文字排版的主题色也改为橙色
                     if (section.type === 'concept-text') {
                       return (
                         <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
@@ -1142,8 +1142,8 @@
                             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
                           </div>
                           
-                          <div className="pl-6 md:pl-10 border-l-2 border-cyan-800 relative bg-gradient-to-r from-cyan-900/10 to-transparent py-4">
-                            <div className="absolute top-0 left-[-5px] w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+                          <div className="pl-6 md:pl-10 border-l-2 border-orange-700 relative bg-gradient-to-r from-orange-900/10 to-transparent py-4">
+                            <div className="absolute top-0 left-[-5px] w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
                             <h3 className="text-xl md:text-3xl font-sans font-black text-white mb-6 tracking-tight">
                               {section.headline}
                             </h3>
@@ -1155,12 +1155,12 @@
                       );
                     }
 
-                    // 💡 新增：带有景深吸附效果的横向大画廊组件
+                    // 💡 修改：带有橙色主题和悬浮吸附放大效果的横向大画廊组件
                     if (section.type === 'enhanced-gallery') {
                       return <EnhancedHorizontalGallery key={section.id || idx} section={section} />;
                     }
 
-                    // 💡 新增：带有 3D 卡片吸附效果的自然与文化画廊
+                    // 💡 自然与文化画廊本身就是绿色的，保持不变即可
                     if (section.type === 'nature-culture-gallery') {
                       return <NatureCultureGallery key={section.id || idx} section={section} />;
                     }
@@ -1230,29 +1230,33 @@
                       );
                     }
 
-                    return (
-                      <div key={section.id || idx} className="mt-12 md:mt-20 w-full relative z-10">
-                        <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-                          <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                        </div>
-                        
-                        <div className="w-full bg-[#111] border border-zinc-800 relative p-1 overflow-hidden group">
-                          <div className="relative z-10 flex justify-center">
-                            <img 
-                              src={section.image} 
-                              alt={section.title} 
-                              className="opacity-90 grayscale hover:grayscale-0 transition-all duration-700 block w-full h-auto object-contain"
-                              onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                            />
-                            <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0 min-w-full">
-                              <span className="text-zinc-600 text-sm tracking-widest opacity-50 font-mono">
-                                [IMG_REQ: {section.title}]
-                              </span>
+                    // 常规图片模块
+                    if (section.type === 'image') {
+                      return (
+                        <div key={section.id || idx} className="mt-12 md:mt-20 w-full relative z-10">
+                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
+                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
+                          </div>
+                          
+                          <div className="w-full bg-[#111] border border-zinc-800 relative p-1 overflow-hidden group">
+                            <div className="relative z-10 flex justify-center">
+                              <img 
+                                src={section.image} 
+                                alt={section.title} 
+                                className="opacity-90 grayscale hover:grayscale-0 transition-all duration-700 block w-full h-auto object-contain"
+                                onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                              />
+                              <div className="absolute inset-0 hidden items-center justify-center bg-[#111] z-0 min-w-full">
+                                <span className="text-zinc-600 text-sm tracking-widest opacity-50 font-mono">
+                                  [IMG_REQ: {section.title}]
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
+                      );
+                    }
+                    return null;
                   })}
 
                 </div>
