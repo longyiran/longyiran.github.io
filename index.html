@@ -331,6 +331,33 @@
               { src: './images/coliving-concept-2.jpg', alt: 'Design Concept 02' },
               { src: './images/coliving-concept-3.jpg', alt: 'Design Concept 03' }
             ]
+          },
+          // 💡 新增：空间策略（文字+配图）
+          {
+            id: 'c10',
+            type: 'concept-text',
+            title: 'SPACE STRATEGY / 空间策略',
+            headline: '“接空间”：连接居住与展览、公共与私密、个体与自然的中间地带',
+            content: '表现方式：半开放廊道、院落空隙、光井、共享露台。'
+          },
+          {
+            id: 'c11',
+            type: 'image',
+            title: 'SPACE STRATEGY VISUALIZATION / 空间策略展示',
+            image: './images/coliving-space-strategy.jpg'
+          },
+          // 💡 新增：建筑设计推演（5张图滑动呈现）
+          {
+            id: 'c12',
+            type: 'enhanced-gallery',
+            title: 'ARCHITECTURAL DESIGN & VOLUME CALCULATION / 建筑设计推演',
+            images: [
+              { src: './images/coliving-design-1.jpg', alt: 'Volume calculation - 体块推演' },
+              { src: './images/coliving-design-2.jpg', alt: 'Volume calculation - 住宅模块 (Dwelling Units)' },
+              { src: './images/coliving-design-3.jpg', alt: 'Volume calculation - 人流动线' },
+              { src: './images/coliving-design-4.jpg', alt: '爆炸图与动线设计' },
+              { src: './images/coliving-design-5.jpg', alt: '空间体验场景' }
+            ]
           }
         ]
       },
@@ -458,6 +485,7 @@
 
     // ==========================================
     // 💡 增强型横向画廊组件 (Cover Flow 景深放大与橙色主题效果)
+    // 增加功能：在指示器旁边显示当前图片的 Alt 文本作为标题
     // ==========================================
     function EnhancedHorizontalGallery({ section }) {
       const containerRef = useRef(null);
@@ -521,8 +549,16 @@
                    <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600">
                       <span>[IMG_MISSING: {img.src}]</span>
                    </div>
-                   <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-orange-500/50 text-orange-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10`}>
-                      {String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}
+                   
+                   {/* 💡 显示下标与图片标题 (Alt Text) */}
+                   <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-orange-500/50 text-orange-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10 flex items-center gap-2`}>
+                      <span>{String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}</span>
+                      {img.alt && (
+                        <>
+                          <span className="w-px h-3 bg-zinc-600"></span>
+                          <span className="uppercase tracking-widest">{img.alt}</span>
+                        </>
+                      )}
                    </div>
                 </div>
               ))}
@@ -1155,12 +1191,17 @@
                       );
                     }
 
+                    // 💡 新增：左右分屏同步展示文字的区位分析幻灯片
+                    if (section.type === 'context-slider') {
+                      return <ContextSlider key={section.id || idx} section={section} />;
+                    }
+
                     // 💡 修改：带有橙色主题和悬浮吸附放大效果的横向大画廊组件
                     if (section.type === 'enhanced-gallery') {
                       return <EnhancedHorizontalGallery key={section.id || idx} section={section} />;
                     }
 
-                    // 💡 自然与文化画廊本身就是绿色的，保持不变即可
+                    // 💡 自然与文化画廊恢复常态滑动
                     if (section.type === 'nature-culture-gallery') {
                       return <NatureCultureGallery key={section.id || idx} section={section} />;
                     }
