@@ -230,14 +230,12 @@
         detailText: '剧情向游戏设计。探讨时间、终点与告别的主题。在系统设计上采用了多线叙事结构，玩家的每一个选择都将改变虚拟空间中的物料呈现形式。'
       },
       { 
-        // 💡 修改点：丰富了《可栖居的美术馆》的项目数据
         id: 3, title: '可栖居的美术馆', subtitle: 'CO-LIVING MUSEUM', category: '展示设计', year: '2025', tags: ['展示设计', '空间设计', '乡村实践'], 
         image: './images/3.jpg',
         logo: './images/logo-3.png',
         video: './images/3.mp4', 
         detailText: '展示空间设计项目。打破传统美术馆“观看与被观看”的二元对立，创造一个观众可以真正“栖居”、互动、并成为艺术一部分的新型展示空间。',
         extraSections: [
-          // 💡 新增模块 1：概念文字引言
           {
             id: 'c1',
             type: 'concept-text',
@@ -245,10 +243,49 @@
             headline: '为什么在乡村做艺术与居住的共生？',
             content: '在城市高密度与快节奏的生活中，人们对“时间、劳动与生活”的感知日渐稀薄。\n\n乡村提供了重建这种感知的可能：在土地与气候的循环中，艺术与居住可以重新缠绕。我们希望通过建筑实践探索一种共生的方式——\n\n让居住成为感知的行为，让艺术回到生活之中。'
           },
-          // 💡 新增模块 2：横向滑动的区位分析图集
+          {
+            id: 'c8',
+            type: 'theme-deepening',
+            title: 'THEME & CONCEPT / 主题与概念深化',
+            questions: [
+              '我们如何让一个厂房在京郊小镇环境中脱颖而出？',
+              '如何让建筑不仅是空间的容器，更成为感知、记忆与回响的精神场所？'
+            ],
+            statementTitle: '生活方式的共鸣',
+            statement: '北京平谷需要独特、文化和开放性：\n\n· 一种促进感知、记忆与交流的奇妙空间体验\n· 一个由自然环境和人造环境结合而成的有意义的整体，反映了特定地段的人们的生活方式',
+            pngAsset: './images/coliving-theme-asset.png'
+          },
+          {
+            id: 'c9',
+            type: 'nature-culture-gallery',
+            title: 'NATURE AND CULTURE / 自然与文化',
+            cards: [
+              {
+                id: 'nc1',
+                title: '地理位置',
+                subtitle: '镇罗营镇的丫髻山',
+                desc: '平谷位于燕山南麓，北京东部平原与山地交界。',
+                image: './images/coliving-geo.jpg'
+              },
+              {
+                id: 'nc2',
+                title: '气候特征',
+                subtitle: '平谷下营村 千亩梯田',
+                desc: '温带大陆性季风气候，四季分明，桃花节是重要节庆。',
+                image: './images/coliving-climate.jpg'
+              },
+              {
+                id: 'nc3',
+                title: '文化线索',
+                subtitle: '桃文化、农耕传统',
+                desc: '节庆聚落形式、院落式空间。',
+                image: './images/coliving-culture.jpg'
+              }
+            ]
+          },
           {
             id: 'c2',
-            type: 'horizontal-gallery',
+            type: 'enhanced-gallery',
             title: 'CONTEXT / 区位分析',
             images: [
               { src: './images/coliving-context-1.jpg', alt: 'Context Analysis 01' },
@@ -259,7 +296,6 @@
               { src: './images/coliving-context-6.jpg', alt: 'Context Analysis 06' }
             ]
           },
-          // 💡 新增：基地规划与城市定位
           {
             id: 'c3',
             type: 'concept-text',
@@ -267,21 +303,18 @@
             headline: '乡村艺术驻地 + 微度假社区',
             content: '从区位分析得出，建筑功能从交通、吃、住、行，结合文化精神（建筑主题）共同吸引游客。\n\n基地概要：\n基地位于北京市平谷区辖内，属于平谷“生态涵养区”定位的一部分。根据《平谷分区规划（2017‑2035）》，“生态立区、绿色发展”是该区未来发展的核心路径。在该规划中，平谷被定位为京东部的重要生态屏障与绿色发展空间，其建设控制、产业布局和用地形式均要兼顾生态安全和乡村振兴。\n\n在“三产融合”与文旅兴乡的大背景下，平谷被鼓励发展高附加值农业、休闲旅游、乡村文化产业与现代服务业。因此，基地可被定位为“乡村艺术驻地 + 微度假社区”，对标未来文旅与文化生态发展方向。'
           },
-          // 💡 新增：目标族群图
           { 
             id: 'c4', 
             type: 'image', 
             title: 'TARGET GROUPS / 目标族群', 
             image: './images/coliving-target.jpg' 
           },
-          // 💡 新增：吸引元素图
           { 
             id: 'c5', 
             type: 'image', 
             title: 'ACTIVITIES & ATTRACTIONS / 吸引元素', 
             image: './images/coliving-activities.jpg' 
           },
-          // 💡 新增：概念起点
           {
             id: 'c6',
             type: 'concept-text',
@@ -289,10 +322,9 @@
             headline: '从“存在的瞬间”到“存在的艺术”',
             content: '设计的出发点源于对伍尔夫（Virginia Woolf）“存在的瞬间（Moments of Being）”的思考：\n\n那些转瞬即逝、却让人意识到“我正在生活”的片刻。\n\n我们将这一文学概念转化为空间语言，提出建筑主题：\n“存在的艺术（Art of Being）”\n——在停留与觉知中重新认识生活。'
           },
-          // 💡 新增模块：设计构思 (3张图的横向画廊)
           {
             id: 'c7',
-            type: 'horizontal-gallery',
+            type: 'enhanced-gallery',
             title: 'DESIGN CONCEPT DEVELOPMENT / 设计构思',
             images: [
               { src: './images/coliving-concept-1.jpg', alt: 'Design Concept 01' },
@@ -419,6 +451,159 @@
             <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 drop-shadow-[0_0_10px_rgba(255,255,255,1)] animate-pulse">
               <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
             </svg>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 💡 增强型横向画廊组件 (Cover Flow 景深放大效果)
+    // ==========================================
+    function EnhancedHorizontalGallery({ section }) {
+      const containerRef = useRef(null);
+      const [activeIndex, setActiveIndex] = useState(0);
+
+      const handleScroll = () => {
+        if (!containerRef.current) return;
+        const container = containerRef.current;
+        const scrollLeft = container.scrollLeft;
+        const center = scrollLeft + container.clientWidth / 2;
+
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        Array.from(container.children).forEach((child, index) => {
+          const childCenter = child.offsetLeft + child.clientWidth / 2;
+          const distance = Math.abs(center - childCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
+        });
+        setActiveIndex(closestIndex);
+      };
+
+      useEffect(() => {
+        // 初始计算焦点
+        const timer = setTimeout(handleScroll, 100);
+        return () => clearTimeout(timer);
+      }, []);
+
+      return (
+        <div className="mt-12 md:mt-24 w-full relative z-10 group">
+          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
+            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
+            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
+                <span>&lt; SWIPE TO EXPLORE &gt;</span>
+            </div>
+          </div>
+          
+          <div className="w-full bg-[#0a0a0a] border border-zinc-800 py-6 md:py-10 relative shadow-2xl overflow-hidden">
+            <div 
+              ref={containerRef}
+              onScroll={handleScroll}
+              className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 px-[10vw] md:px-[20vw] pb-4 items-center h-[50vh] md:h-[65vh]"
+            >
+              {section.images.map((img, i) => (
+                <div 
+                  key={i} 
+                  className={`min-w-[85%] md:min-w-[60%] h-full flex-shrink-0 snap-center relative border border-zinc-800 bg-black cursor-ew-resize overflow-hidden transition-all duration-500 ease-out ${
+                    activeIndex === i ? 'scale-100 opacity-100 shadow-[0_0_40px_rgba(6,182,212,0.15)] z-20' : 'scale-[0.85] opacity-30 z-10'
+                  }`}
+                >
+                   <img 
+                      src={img.src} 
+                      alt={img.alt} 
+                      className={`w-full h-full object-contain transition-transform duration-1000 ${activeIndex === i ? 'scale-105' : 'scale-100'}`}
+                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                   />
+                   <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600">
+                      <span>[IMG_MISSING: {img.src}]</span>
+                   </div>
+                   <div className={`absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border transition-colors duration-500 ${activeIndex === i ? 'border-cyan-500/50 text-cyan-400' : 'border-zinc-700 text-zinc-400'} text-[10px] font-mono backdrop-blur-sm z-10`}>
+                      {String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}
+                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 💡 自然与文化组件 (卡片型 Cover Flow)
+    // ==========================================
+    function NatureCultureGallery({ section }) {
+      const containerRef = useRef(null);
+      const [activeIndex, setActiveIndex] = useState(0);
+
+      const handleScroll = () => {
+        if (!containerRef.current) return;
+        const container = containerRef.current;
+        const scrollLeft = container.scrollLeft;
+        const center = scrollLeft + container.clientWidth / 2;
+
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        Array.from(container.children).forEach((child, index) => {
+          const childCenter = child.offsetLeft + child.clientWidth / 2;
+          const distance = Math.abs(center - childCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
+        });
+        setActiveIndex(closestIndex);
+      };
+
+      useEffect(() => {
+        const timer = setTimeout(handleScroll, 100);
+        return () => clearTimeout(timer);
+      }, []);
+
+      return (
+        <div className="mt-12 md:mt-24 w-full relative z-10">
+          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
+            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
+            <div className="text-[10px] text-green-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
+                <span>&lt; SCROLL &gt;</span>
+            </div>
+          </div>
+          
+          <div className="w-full relative py-4">
+            <div 
+              ref={containerRef}
+              onScroll={handleScroll}
+              className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 px-[10vw] md:px-[25vw] pb-8 items-stretch"
+            >
+              {section.cards.map((card, i) => (
+                <div 
+                  key={card.id} 
+                  className={`min-w-[85%] md:min-w-[45%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border transition-all duration-500 ease-out cursor-ew-resize ${
+                    activeIndex === i ? 'border-green-500/40 scale-100 opacity-100 shadow-[0_0_30px_rgba(34,197,94,0.1)] z-20' : 'border-zinc-800 scale-90 opacity-40 z-10'
+                  }`}
+                >
+                   <div className="w-full aspect-[16/9] relative overflow-hidden bg-black border-b border-zinc-800">
+                     <img 
+                        src={card.image} 
+                        alt={card.title} 
+                        className={`w-full h-full object-cover transition-transform duration-1000 ${activeIndex === i ? 'scale-105' : 'scale-100'}`}
+                        onError={(e) => { e.target.style.display='none'; }}
+                     />
+                   </div>
+                   <div className="p-6 md:p-8 flex flex-col flex-grow">
+                     <div className="flex items-center gap-2 mb-2">
+                        <span className={`w-1.5 h-1.5 rounded-full transition-colors ${activeIndex === i ? 'bg-green-500 animate-pulse' : 'bg-zinc-600'}`}></span>
+                        <h4 className="text-white text-lg font-bold tracking-widest uppercase">{card.title}</h4>
+                     </div>
+                     <div className="text-green-400/80 text-[10px] font-mono mb-4 uppercase tracking-widest">{card.subtitle}</div>
+                     <p className="text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">{card.desc}</p>
+                   </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       );
@@ -912,7 +1097,44 @@
                   {/* --- 动态渲染额外的内容板块 --- */}
                   {selectedProject.extraSections && selectedProject.extraSections.map((section, idx) => {
                     
-                    // 💡 新增逻辑 1：带有设计感的概念引言排版
+                    // 💡 新增：定制化的“主题与概念深化”图文穿插排版
+                    if (section.type === 'theme-deepening') {
+                      return (
+                        <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
+                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
+                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
+                          </div>
+                          <div className="relative p-8 md:p-16 bg-gradient-to-br from-[#111] to-[#050505] border border-zinc-800 overflow-hidden group">
+                            {/* 顶部与底部的赛博发光线条 */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-600 to-transparent"></div>
+                            <div className="absolute bottom-0 right-0 w-1/3 h-1 bg-gradient-to-l from-purple-600 to-transparent"></div>
+                            
+                            {/* 悬浮的说明性 PNG 小图 */}
+                            <div className="absolute right-[-5%] bottom-0 md:right-10 md:bottom-10 opacity-30 md:opacity-70 transition-transform duration-1000 group-hover:scale-105 group-hover:opacity-100 pointer-events-none">
+                              <img src={section.pngAsset} alt="Theme Asset" className="w-48 md:w-80 h-auto object-contain filter drop-shadow-[0_0_25px_rgba(6,182,212,0.4)]" onError={(e) => { e.target.style.display='none'; }}/>
+                            </div>
+
+                            <div className="relative z-10 space-y-10 md:w-3/4">
+                              <div className="space-y-6">
+                                {section.questions.map((q, i) => (
+                                  <h3 key={i} className="text-2xl md:text-4xl font-sans font-black text-white tracking-tight leading-snug drop-shadow-md">
+                                    {q}
+                                  </h3>
+                                ))}
+                              </div>
+                              <div className="pl-6 border-l-4 border-cyan-700 bg-cyan-900/5 p-4 backdrop-blur-sm">
+                                <h4 className="text-cyan-400 font-bold text-lg mb-4 tracking-widest">{section.statementTitle}</h4>
+                                <div className="text-zinc-300 text-sm md:text-base leading-loose whitespace-pre-wrap font-sans">
+                                  {section.statement}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // 概念文字排版
                     if (section.type === 'concept-text') {
                       return (
                         <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
@@ -933,40 +1155,14 @@
                       );
                     }
 
-                    // 💡 新增逻辑 2：横向滑动的区位分析图集
-                    if (section.type === 'horizontal-gallery') {
-                      return (
-                        <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10 group">
-                          <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
-                            <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
-                            <div className="text-[10px] text-cyan-500 tracking-widest uppercase animate-pulse flex items-center gap-2">
-                               <span>&lt; SWIPE TO EXPLORE &gt;</span>
-                            </div>
-                          </div>
-                          
-                          <div className="w-full bg-[#111] border border-zinc-800 p-2 relative shadow-2xl">
-                            {/* 画廊滚动容器 */}
-                            <div className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-4 pb-4 items-center h-[50vh] md:h-[65vh]">
-                              {section.images.map((img, i) => (
-                                <div key={i} className="min-w-[85%] md:min-w-[60%] h-full flex-shrink-0 snap-center relative border border-zinc-800 bg-black group/img cursor-ew-resize overflow-hidden">
-                                   <img 
-                                      src={img.src} 
-                                      alt={img.alt} 
-                                      className="w-full h-full object-contain opacity-80 group-hover/img:opacity-100 group-hover/img:scale-[1.02] transition-all duration-700" 
-                                      onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                                   />
-                                   <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600">
-                                      <span>[IMG_MISSING: {img.src}]</span>
-                                   </div>
-                                   <div className="absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 border border-zinc-700 text-[10px] font-mono text-zinc-400 backdrop-blur-sm z-10">
-                                      {String(i + 1).padStart(2, '0')} / {String(section.images.length).padStart(2, '0')}
-                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      );
+                    // 💡 新增：带有景深吸附效果的横向大画廊组件
+                    if (section.type === 'enhanced-gallery') {
+                      return <EnhancedHorizontalGallery key={section.id || idx} section={section} />;
+                    }
+
+                    // 💡 新增：带有 3D 卡片吸附效果的自然与文化画廊
+                    if (section.type === 'nature-culture-gallery') {
+                      return <NatureCultureGallery key={section.id || idx} section={section} />;
                     }
 
                     if (section.type === 'interactive-flow') {
