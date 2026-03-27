@@ -46,7 +46,6 @@
         detailText: '《符号回廊》是一款基于虚拟现实技术的多人叙事体验游戏，它源自对数字时代交流异化的深刻反思。在当下，表情符号和简化的文字已成为情感表达的代名词，而身体本身丰富的语义潜力却在逐渐消退。该项目构建了一个无限的符号宇宙，灵感源自博尔赫斯的《巴别图书馆》。\n\n在游戏中，玩家彼此间成为隐形的“符号旅行者”。在这里，交流回归到其最根本的身体维度：通过仪式性的手势在环境中生成、替换和丢弃符号，玩家以异步、跨时间的方式共同改写世界的语义和叙事结构。这不仅仅是一款游戏，更是一场思想实验：当既定的符号系统失效时，我们的身体动作能否再次成为意义的源泉，在虚拟空间中谱写新的连接与理解的诗篇？',
         detailTextEn: 'Signless is a VR-based multiplayer narrative experience born from a deep reflection on the alienation of communication in the digital age. While emojis and simplified text have become shorthand for emotion, the rich semantic potential of the body itself is fading. This project constructs an infinite universe of symbols, inspired by Borges\' "Library of Babel."\n\nPlayers become invisible "Sign Voyagers" to one another. Here, communication returns to its most fundamental bodily dimension: through ritualistic gestures to generate, replace, and discard symbols within the environment, players collaboratively rewrite the world\'s semantics and narrative fabric in asynchronous, time-crossing collaboration. This is more than a game; it is a thought experiment: when established sign systems fail, can our physical gestures once again become the source of meaning, composing a new poetry of connection and understanding within virtual space?',
         extraSections: [
-          // 💡 改动 1：修改 scrollable 为 false，宽度100%铺满展示
           { id: 'p1', type: 'image', title: 'CONCEPT & INSPIRATION', image: './images/process-1.jpg', scrollable: false },
           { id: 'r1', type: 'image', title: 'RESEARCH & FLOWCHART', image: './images/signless-research.jpg', scrollable: false },
           { 
@@ -58,7 +57,6 @@
               { 
                 name: '阿莱夫记忆库 (Aleph Memory Bank)', 
                 image: './images/scene-1.jpg',
-                // 💡 改动 2：增加了第四张过程图
                 detailImages: [
                   './images/scene-1-process-1.jpg',
                   './images/scene-1-process-2.jpg',
@@ -128,7 +126,6 @@
                   './images/scene-4-process-2.jpg',
                   './images/scene-4-process-3.jpg'
                 ],
-                // 💡 改动 3：为迷雾空间增加了带有 PNG 资产显示的排版
                 desc: (
                   <div className="space-y-6">
                     <div>
@@ -402,8 +399,8 @@
       const [selectedProject, setSelectedProject] = useState(null);
       const [isDetailMuted, setIsDetailMuted] = useState(true);
       
-      const [activeSceneModal, setActiveSceneModal] = useState(null);
-      // 💡 状态追踪：当前鼠标悬浮的场景图片
+      // 💡 改进的数据结构：包含当前场景、全部场景列表和当前索引，以便于实现左右翻页
+      const [activeSceneModal, setActiveSceneModal] = useState(null); 
       const [hoveredSceneBg, setHoveredSceneBg] = useState(null);
       
       const detailVideoRef = useRef(null);
@@ -440,22 +437,23 @@
           <div className={`min-h-screen font-mono selection:bg-white selection:text-black relative z-50 transition-colors duration-1000 ${hoveredSceneBg ? 'bg-transparent' : 'bg-[#050505]'}`}>
             <CustomCursor /> {/* 详情页注入光标 */}
 
-            {/* 💡 沉浸式动态背景层 */}
+            {/* 💡 升级版：背景变亮，更有穿透力的全屏沉浸特效 */}
             <div 
-              className={`fixed inset-0 z-[-1] pointer-events-none transition-opacity duration-700 ease-in-out ${hoveredSceneBg ? 'opacity-30' : 'opacity-0'}`}
+              className={`fixed inset-0 z-[-1] pointer-events-none transition-opacity duration-700 ease-in-out ${hoveredSceneBg ? 'opacity-60' : 'opacity-0'}`}
             >
               <div 
-                className={`absolute inset-0 bg-cover bg-center transition-transform duration-10000 ease-out ${hoveredSceneBg ? 'scale-105' : 'scale-100'}`}
+                className={`absolute inset-0 bg-cover bg-center transition-transform duration-[10000ms] ease-out ${hoveredSceneBg ? 'scale-105' : 'scale-100'}`}
                 style={{ backgroundImage: `url(${hoveredSceneBg || ''})` }} 
               />
-              <div className="absolute inset-0 bg-[#050505]/40 backdrop-blur-[2px]"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-[#050505]"></div>
+              <div className="absolute inset-0 bg-[#050505]/20 backdrop-blur-[2px]"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/10 to-[#050505]"></div>
             </div>
             
-            {/* 💡 全屏极客风场景详情弹窗 */}
-            {activeSceneModal && (
+            {/* 💡 全屏极客风场景详情弹窗 (支持左右切换) */}
+            {activeSceneModal && activeSceneModal.current && (
               <div className="fixed inset-0 z-[80000] flex items-center justify-center p-4 md:p-12 bg-black/90 backdrop-blur-md transition-all">
                 <div className="relative w-full max-w-7xl h-[85vh] md:h-[80vh] bg-[#111] border border-zinc-700 shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in duration-300">
+                  
                   <button 
                     onClick={() => setActiveSceneModal(null)} 
                     className="absolute top-4 right-4 z-50 text-zinc-400 hover:text-white font-mono text-xs uppercase bg-black/50 px-3 py-1.5 border border-zinc-700 cursor-pointer backdrop-blur-sm transition-colors shadow-lg"
@@ -463,14 +461,14 @@
                     [X] CLOSE
                   </button>
                   
-                  {/* 左侧：详细的过程图或大场景图 (支持多张图片垂直滚动) */}
+                  {/* 左侧：详细的过程图或大场景图 */}
                   <div className="w-full md:w-3/5 h-1/2 md:h-full bg-black relative border-b md:border-b-0 md:border-r border-zinc-800 overflow-y-auto hide-scrollbar flex flex-col p-4 gap-6 scroll-smooth">
-                    {activeSceneModal.detailImages && activeSceneModal.detailImages.length > 0 ? (
-                      activeSceneModal.detailImages.map((imgSrc, idx) => (
+                    {activeSceneModal.current.detailImages && activeSceneModal.current.detailImages.length > 0 ? (
+                      activeSceneModal.current.detailImages.map((imgSrc, idx) => (
                         <div key={idx} className="relative w-full border border-zinc-800/50 bg-[#050505] p-1">
                           <img 
                             src={imgSrc} 
-                            alt={`${activeSceneModal.name} detail ${idx + 1}`} 
+                            alt={`${activeSceneModal.current.name} detail ${idx + 1}`} 
                             className="w-full h-auto object-contain" 
                             onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                           />
@@ -478,15 +476,14 @@
                             <span>[IMG_NOT_FOUND]</span>
                             <span>{imgSrc}</span>
                           </div>
-                          {/* 图片标号 */}
                           <div className="absolute top-2 left-2 text-[8px] font-mono text-zinc-500 bg-black/80 px-1">IMG_{idx+1}</div>
                         </div>
                       ))
                     ) : (
                       <div className="relative w-full h-full flex items-center justify-center">
                         <img 
-                          src={activeSceneModal.image} 
-                          alt={activeSceneModal.name} 
+                          src={activeSceneModal.current.image} 
+                          alt={activeSceneModal.current.name} 
                           className="w-full h-full object-contain p-2" 
                           onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                         />
@@ -496,27 +493,48 @@
                       </div>
                     )}
                     
-                    {/* 滚动提示 */}
-                    {activeSceneModal.detailImages && activeSceneModal.detailImages.length > 1 && (
+                    {activeSceneModal.current.detailImages && activeSceneModal.current.detailImages.length > 1 && (
                       <div className="sticky bottom-2 mx-auto mt-auto text-[10px] text-cyan-500 font-mono tracking-widest bg-black/80 px-3 py-1 border border-zinc-800 pointer-events-none animate-pulse z-10 w-fit backdrop-blur-sm">
                         ↓ SCROLL FOR MORE IMAGES
                       </div>
                     )}
                   </div>
                   
-                  {/* 右侧：档案介绍文字 (兼容字符串与 React 节点富文本) */}
-                  <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 md:p-10 flex flex-col bg-[#0a0a0a] overflow-y-auto custom-scrollbar">
-                    <div className="text-[10px] text-cyan-500 font-mono tracking-widest mb-4 flex items-center gap-2">
+                  {/* 右侧：档案介绍文字与导航 */}
+                  <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 md:p-10 flex flex-col bg-[#0a0a0a]">
+                    <div className="text-[10px] text-cyan-500 font-mono tracking-widest mb-4 flex items-center gap-2 shrink-0">
                       <span className="w-2 h-2 bg-cyan-500 animate-pulse"></span>
                       :/ SCENE_DATA_ARCHIVE
                     </div>
-                    <h3 className="font-sans font-black text-2xl md:text-3xl uppercase text-white mb-6 tracking-tighter">
-                      {activeSceneModal.name}
+                    <h3 className="font-sans font-black text-2xl md:text-3xl uppercase text-white mb-6 tracking-tighter shrink-0">
+                      {activeSceneModal.current.name}
                     </h3>
                     
-                    {/* 判断并渲染：如果是字符串则用原排版，如果是组件直接渲染 */}
-                    <div className="text-sm text-zinc-400 leading-relaxed font-sans text-justify whitespace-pre-wrap flex-1">
-                      {activeSceneModal.desc || 'System Note: No detailed records found in the archive for this zone.'}
+                    <div className="text-sm text-zinc-400 leading-relaxed font-sans text-justify whitespace-pre-wrap flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
+                      {activeSceneModal.current.desc || 'System Note: No detailed records found in the archive for this zone.'}
+                    </div>
+
+                    {/* 💡 新增：下方左右切换导航栏 */}
+                    <div className="mt-4 pt-4 border-t border-zinc-800 flex justify-between items-center text-[10px] font-mono text-zinc-500 shrink-0">
+                      <button 
+                        onClick={() => {
+                          const prevIdx = (activeSceneModal.index - 1 + activeSceneModal.list.length) % activeSceneModal.list.length;
+                          setActiveSceneModal({ ...activeSceneModal, index: prevIdx, current: activeSceneModal.list[prevIdx] });
+                        }} 
+                        className="hover:text-cyan-400 transition-colors cursor-pointer flex items-center gap-2"
+                      >
+                        &lt; PREV SCENE
+                      </button>
+                      <span className="text-zinc-600">[ 0{activeSceneModal.index + 1} / 0{activeSceneModal.list.length} ]</span>
+                      <button 
+                        onClick={() => {
+                          const nextIdx = (activeSceneModal.index + 1) % activeSceneModal.list.length;
+                          setActiveSceneModal({ ...activeSceneModal, index: nextIdx, current: activeSceneModal.list[nextIdx] });
+                        }} 
+                        className="hover:text-cyan-400 transition-colors cursor-pointer flex items-center gap-2"
+                      >
+                        NEXT SCENE &gt;
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -616,7 +634,7 @@
                   {/* --- 动态渲染额外的内容板块 --- */}
                   {selectedProject.extraSections && selectedProject.extraSections.map((section, idx) => {
                     
-                    // 专门渲染 "scene-map" (场景与中心平面图) 模块
+                    // 专门渲染 "scene-map" 模块
                     if (section.type === 'scene-map') {
                       return (
                         <div key={section.id || idx} className="mt-12 md:mt-20 w-full">
@@ -629,20 +647,21 @@
                           
                           <div className="w-full relative aspect-square md:aspect-[21/9] bg-[#050505] border border-zinc-800 p-1 overflow-hidden group">
                             
-                            {/* 💡 背景：2x2场景网格阵列，增加了 onMouseEnter 事件改变全局背景 */}
+                            {/* 背景：2x2场景网格阵列 */}
                             <div className="absolute inset-1 grid grid-cols-2 grid-rows-2 gap-1 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
                               {section.scenes.map((scene, i) => (
                                 <div 
                                   key={i} 
-                                  onClick={() => setActiveSceneModal(scene)}
+                                  onClick={() => setActiveSceneModal({ current: scene, list: section.scenes, index: i })}
                                   onMouseEnter={() => setHoveredSceneBg(scene.image)}
                                   onMouseLeave={() => setHoveredSceneBg(null)}
                                   className="relative w-full h-full overflow-hidden bg-black group/scene cursor-pointer"
                                 >
+                                  {/* 💡 升级效果：悬浮时不仅恢复色彩，还会产生极其明显的放大效果 (scale-110) */}
                                   <img 
                                     src={scene.image} 
                                     alt={scene.name} 
-                                    className="w-full h-full object-cover grayscale opacity-70 group-hover/scene:grayscale-0 group-hover/scene:opacity-100 group-hover/scene:scale-105 transition-all duration-700" 
+                                    className="w-full h-full object-cover grayscale opacity-70 group-hover/scene:grayscale-0 group-hover/scene:opacity-100 group-hover/scene:scale-110 transition-all duration-700" 
                                     onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                                   />
                                   <div className="absolute inset-0 hidden items-center justify-center bg-[#111]">
@@ -676,7 +695,7 @@
                       );
                     }
 
-                    // 默认逻辑：渲染普通图表 (去除了 scrollable，宽度自动100%铺满)
+                    // 默认逻辑：渲染普通图表
                     return (
                       <div key={section.id || idx} className="mt-12 md:mt-20 w-full relative z-10">
                         <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-4">
