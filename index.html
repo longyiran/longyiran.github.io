@@ -371,11 +371,17 @@
             title: 'SPACE STRATEGY VISUALIZATION / 空间策略展示',
             image: './images/coliving-space-strategy.jpg'
           },
+          // 💡 新增：单独一栏放置爆炸图
+          {
+            id: 'c12_a',
+            type: 'image',
+            title: 'AXONOMETRIC DIAGRAM / 整体轴测图',
+            image: './images/coliving-axonometric.png'
+          },
           {
             id: 'c13',
             type: 'floor-plan-gallery',
             title: 'SPATIAL RENDERING / 空间渲染与功能分布',
-            overallPlan: './images/coliving-axonometric.png', 
             floors: [
               {
                 level: 'F1',
@@ -605,11 +611,7 @@
       const activeFloor = section.floors[activeFloorIndex];
 
       return (
-        <div 
-          className="w-full relative z-10 mt-12 md:mt-24 group/floor"
-          onMouseEnter={() => setHoveredSceneBg && setHoveredSceneBg(section.overallPlan)}
-          onMouseLeave={() => setHoveredSceneBg && setHoveredSceneBg(null)}
-        >
+        <div className="w-full relative z-10 group/floor mt-12 md:mt-24">
           <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
              <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
              <div className="text-[10px] text-[#98C331] tracking-widest uppercase animate-pulse">
@@ -617,18 +619,18 @@
              </div>
           </div>
 
-          {/* 前景操作与渲染区域：右侧布局 */}
+          {/* 前景操作与渲染区域 */}
           <div className="relative z-10 w-full flex flex-col md:flex-row items-stretch min-h-[500px] md:min-h-[60vh]">
             
-            {/* 左侧：电梯导航按钮（移除了透明占位区块，更紧凑） */}
-            <div className="w-16 md:w-20 flex flex-col-reverse justify-center items-center gap-4 py-8 shrink-0 z-30 pointer-events-auto">
+            {/* 左侧：电梯导航按钮 */}
+            <div className="w-full md:w-20 flex flex-row md:flex-col-reverse justify-center items-center gap-4 p-4 md:py-8 shrink-0 z-30 pointer-events-auto bg-[#0a0a0a] border-b md:border-b-0 md:border-r border-zinc-800">
                 {section.floors.map((floor, idx) => (
                   <button
                     key={floor.level}
                     onClick={() => setActiveFloorIndex(idx)}
                     className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center font-black font-sans text-lg border cursor-pointer transition-all duration-300 rounded-sm shadow-xl backdrop-blur-md ${
                       activeFloorIndex === idx 
-                        ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_20px_rgba(152,195,49,0.6)] translate-x-2' 
+                        ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_20px_rgba(152,195,49,0.6)] md:translate-x-2' 
                         : 'bg-[#111] border-zinc-700 text-zinc-400 hover:text-[#98C331] hover:border-[#98C331]/80 hover:bg-black'
                     }`}
                   >
@@ -638,7 +640,7 @@
             </div>
 
             {/* 右侧：主体功能与 16:9 渲染图集 */}
-            <div className="w-full flex-1 flex flex-col bg-[#0a0a0a] border border-zinc-800 shadow-2xl rounded-lg overflow-hidden relative z-20">
+            <div className="w-full flex-1 flex flex-col bg-[#0a0a0a] border border-zinc-800 shadow-2xl overflow-hidden relative z-20">
               
               {/* 顶部楼层信息头部 */}
               <div className="p-6 md:p-8 bg-gradient-to-r from-[#98C331]/10 to-transparent border-b border-zinc-800 shrink-0">
@@ -672,11 +674,13 @@
                       className="w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center bg-[#050505] p-4 md:p-8 aspect-video"
                       onMouseEnter={(e) => {
                         e.stopPropagation();
+                        // 核心：当鼠标放在这张渲染图上时，告诉 App 修改全局背景！
                         if (setHoveredSceneBg) setHoveredSceneBg(imgSrc);
                       }}
                       onMouseLeave={(e) => {
                         e.stopPropagation();
-                        if (setHoveredSceneBg) setHoveredSceneBg(section.overallPlan);
+                        // 鼠标移出后清空背景
+                        if (setHoveredSceneBg) setHoveredSceneBg(null);
                       }}
                     >
                       <img 
@@ -783,7 +787,7 @@
     }
 
     // ==========================================
-    // 💡 自然与文化组件 (去除悬浮放大特效)
+    // 💡 自然与文化组件 (缩小了卡片宽度，变得极其紧凑)
     // ==========================================
     function NatureCultureGallery({ section }) {
       return (
@@ -792,11 +796,11 @@
             <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {section.title}</div>
           </div>
           <div className="w-full relative py-4">
-            <div className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 md:gap-12 pb-8 items-stretch md:px-[5vw]">
+            <div className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-4 md:gap-8 pb-8 items-stretch md:px-[2vw]">
               {section.cards.map((card, i) => (
                 <div 
                   key={card.id} 
-                  className="min-w-[85%] md:min-w-[40%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border border-zinc-800 transition-colors duration-500 ease-out cursor-ew-resize hover:border-[#98C331]/40 hover:shadow-[0_0_30px_rgba(152,195,49,0.15)] opacity-100 z-10"
+                  className="min-w-[60%] md:min-w-[25%] lg:min-w-[20%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border border-zinc-800 transition-colors duration-500 ease-out cursor-ew-resize hover:border-[#98C331]/40 hover:shadow-[0_0_30px_rgba(152,195,49,0.15)] opacity-100 z-10"
                 >
                    <div className="w-full aspect-video relative overflow-hidden bg-black border-b border-zinc-800">
                      <img 
@@ -806,13 +810,13 @@
                         onError={(e) => { e.target.style.display='none'; }}
                      />
                    </div>
-                   <div className="p-6 md:p-8 flex flex-col flex-grow">
-                     <div className="flex items-center gap-2 mb-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#98C331]"></span>
-                        <h4 className="text-white text-lg font-bold tracking-widest uppercase">{card.title}</h4>
+                   <div className="p-4 md:p-5 flex flex-col flex-grow">
+                     <div className="flex items-center gap-2 mb-1">
+                        <span className="w-1 h-1 rounded-full bg-[#98C331]"></span>
+                        <h4 className="text-white text-base font-bold tracking-widest uppercase">{card.title}</h4>
                      </div>
-                     <div className="text-[#98C331]/80 text-[10px] font-mono mb-4 uppercase tracking-widest">{card.subtitle}</div>
-                     <p className="text-zinc-400 text-sm leading-relaxed whitespace-pre-wrap">{card.desc}</p>
+                     <div className="text-[#98C331]/80 text-[10px] font-mono mb-3 uppercase tracking-widest">{card.subtitle}</div>
+                     <p className="text-zinc-400 text-xs leading-relaxed whitespace-pre-wrap">{card.desc}</p>
                    </div>
                 </div>
               ))}
@@ -823,7 +827,7 @@
     }
 
     // ==========================================
-    // 💡 区位分析交互组件 (修改为上下结构，适配 16:9 画幅)
+    // 💡 区位分析交互组件 (图片锁定相对高度与 object-contain，防止被裁或过长)
     // ==========================================
     function ContextSlider({ section }) {
       const containerRef = useRef(null);
@@ -877,19 +881,19 @@
           
           <div className="relative w-full flex flex-col shadow-2xl border border-zinc-800 bg-[#0a0a0a]">
             
-            {/* 顶部横向画廊：锁定为 aspect-video (16:9) 并满宽显示 */}
-            <div className="w-full relative overflow-hidden group/gallery border-b border-zinc-800 aspect-video bg-black shrink-0">
+            {/* 顶部横向画廊：限制高度，使用 object-contain 保证完整显示并适应屏幕 */}
+            <div className="w-full relative overflow-hidden group/gallery border-b border-zinc-800 bg-[#050505] shrink-0 h-[40vh] md:h-[60vh]">
               <div 
                 ref={containerRef}
                 onScroll={handleScroll}
                 className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory w-full h-full items-center"
               >
                 {section.items.map((item, i) => (
-                  <div key={i} className="min-w-full h-full flex-shrink-0 snap-center flex justify-center items-center cursor-ew-resize bg-[#050505] p-0">
+                  <div key={i} className="min-w-full h-full flex-shrink-0 snap-center flex justify-center items-center cursor-ew-resize bg-[#050505] p-4 md:p-8">
                     <img 
                       src={item.image} 
                       alt={item.title} 
-                      className={`w-full h-full object-cover transition-transform duration-700 ${activeIndex === i ? 'scale-100 group-hover/gallery:scale-[1.02]' : 'scale-95 opacity-50'}`}
+                      className={`w-full h-full object-contain transition-transform duration-700 ${activeIndex === i ? 'scale-100 group-hover/gallery:scale-[1.02]' : 'scale-95 opacity-50'}`}
                       onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                     />
                     <div className="absolute inset-0 hidden items-center justify-center text-[10px] font-mono text-zinc-600 opacity-50">
@@ -903,7 +907,7 @@
               </div>
             </div>
             
-            {/* 底部文本内容：文字排布在图片下方 */}
+            {/* 底部文本内容：文字排布在图片正下方 */}
             <div className="w-full p-6 md:p-8 flex flex-col justify-center bg-[#0a0a0a]">
               <div className="text-[#98C331] text-[10px] font-mono mb-2 flex items-center gap-2 shrink-0">
                   <span className="w-1.5 h-1.5 bg-[#98C331] animate-pulse"></span>
