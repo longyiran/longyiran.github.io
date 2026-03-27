@@ -148,7 +148,7 @@
                   <div className="space-y-6">
                     <div>
                       <div className="text-white font-bold text-[11px] mb-2 uppercase tracking-widest flex items-center gap-2">
-                        <span className="w-1 h-1 bg-cyan-500"></span>
+                        <span className="w-1 h-1 bg-[#98C331]"></span>
                         灵感溯源：博尔赫斯《巴别图书馆》
                       </div>
                       <div className="text-zinc-500 text-xs italic mb-2 font-mono">"无限路径与迷宫 → 无限分岔的叙事"</div>
@@ -159,14 +159,14 @@
                       <div className="text-white font-bold text-[10px] mb-1 tracking-widest uppercase">:/ ZONE_01: 书架迷宫 (Labyrinth of Tomes)</div>
                       <p className="text-xs text-zinc-400">高耸入云的巨型书架构筑成类似八卦阵的深邃迷宫。它不仅是物理层面的空间解谜屏障，更在隐喻上象征着人类知识、记忆与符号在时间长河中的无限分岔与重构。</p>
                     </div>
-                    <div className="border-l border-cyan-900 pl-4 relative">
-                      <div className="text-cyan-400 font-bold text-[10px] mb-1 tracking-widest uppercase">:/ ZONE_02: 能量汇聚柱 (Energy Pillar)</div>
+                    <div className="border-l border-[#98C331]/50 pl-4 relative">
+                      <div className="text-[#98C331] font-bold text-[10px] mb-1 tracking-widest uppercase">:/ ZONE_02: 能量汇聚柱 (Energy Pillar)</div>
                       <p className="text-xs text-zinc-400 mb-4">矗立于迷宫绝对中心的能量锚点，作为全维度信息与玩家动作信号的终极汇聚站。其四周漂浮环绕着“上一个文明遗留的璀璨符号线索”，指引玩家探寻失落的真义。</p>
                       <div className="bg-[#050505] border border-zinc-800 p-3 inline-block relative group/img cursor-crosshair">
-                        <img src="./images/energy-pillar.png" alt="Energy Pillar Asset" className="w-32 md:w-40 h-auto object-contain filter drop-shadow-[0_0_15px_rgba(0,255,255,0.15)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+                        <img src="./images/energy-pillar.png" alt="Energy Pillar Asset" className="w-32 md:w-40 h-auto object-contain filter drop-shadow-[0_0_15px_rgba(152,195,49,0.15)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
                         <div className="absolute inset-0 hidden items-center justify-center text-[8px] text-zinc-600 font-mono">[PNG_MISSING]</div>
-                        <div className="absolute inset-0 border border-cyan-500/0 group-hover/img:border-cyan-500/40 transition-colors pointer-events-none"></div>
-                        <div className="absolute bottom-1 right-1 text-[8px] text-cyan-700 font-mono">ASSET_ID: PILLAR</div>
+                        <div className="absolute inset-0 border border-[#98C331]/0 group-hover/img:border-[#98C331]/40 transition-colors pointer-events-none"></div>
+                        <div className="absolute bottom-1 right-1 text-[8px] text-[#98C331] font-mono">ASSET_ID: PILLAR</div>
                       </div>
                     </div>
                   </div>
@@ -599,81 +599,68 @@
     }
 
     // ==========================================
-    // 💡 全新功能：楼层空间沙盘导航展示组件 (FloorPlanGallery) - 优化版
+    // 💡 全新功能：楼层空间沙盘导航展示组件 (FloorPlanGallery) - 背景透出版
     // ==========================================
     function FloorPlanGallery({ section }) {
       const [activeFloorIndex, setActiveFloorIndex] = useState(0);
-      const [hoveredFloorIndex, setHoveredFloorIndex] = useState(null);
-      
+      const [isHovered, setIsHovered] = useState(false);
       const activeFloor = section.floors[activeFloorIndex];
-      // 提取鼠标悬浮对应楼层的第一张渲染图作为左侧背景
-      const bgImage = hoveredFloorIndex !== null && section.floors[hoveredFloorIndex].images[0] 
-        ? section.floors[hoveredFloorIndex].images[0] 
-        : null;
 
       return (
-        <div className="w-full relative z-10 group">
-          <div className="w-full bg-[#050505] border border-zinc-800 flex flex-col md:flex-row shadow-2xl relative min-h-[500px] md:min-h-[60vh]">
+        <div 
+          className="w-full relative z-10 group rounded-lg overflow-hidden border border-zinc-800/50 shadow-2xl transition-all duration-700 hover:border-[#98C331]/30"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* 背景爆炸图层 - 仅在悬浮时浮现 */}
+          <div className="absolute inset-0 z-0 bg-[#050505] overflow-hidden pointer-events-none">
+            <img 
+              src={section.overallPlan} 
+              alt="Axonometric Background" 
+              className={`w-full h-full object-contain object-right opacity-0 scale-95 transition-all duration-1000 ease-out filter brightness-50 ${isHovered ? 'opacity-30 scale-100' : ''}`}
+            />
+            {/* 渐变遮罩，确保文字可读 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          </div>
+
+          {/* 前景内容容器：纯渲染图与楼层导航 */}
+          <div className="relative z-10 w-full flex flex-col md:flex-row min-h-[500px] md:min-h-[60vh]">
             
-            {/* 左侧：整体爆炸图 & 垂直楼层导航 */}
-            <div className="w-full md:w-1/2 border-b md:border-b-0 md:border-r border-zinc-800 relative bg-[#0a0a0a] flex items-center justify-center p-2 md:p-8 overflow-hidden">
-              
-              {/* 动态悬浮背景图层 */}
-              <div 
-                className={`absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out z-0 ${bgImage ? 'opacity-30 scale-105 blur-sm' : 'opacity-0 scale-100'}`}
-                style={{ backgroundImage: bgImage ? `url(${bgImage})` : 'none' }}
-              ></div>
-              {/* 优化后的遮罩，保证原图清晰 */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10 pointer-events-none"></div>
-
-              {/* 爆炸图底图 */}
-              <img 
-                src={section.overallPlan} 
-                alt="Axonometric Diagram" 
-                className="w-full h-full max-h-[65vh] object-contain opacity-100 hover:scale-[1.02] transition-transform duration-500 relative z-20 drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]" 
-                onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-              />
-              <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 relative z-20">
-                <span>[PLAN_IMG_MISSING]</span>
-              </div>
-
-              {/* 悬浮楼层电梯按钮：移到了右边框，避免遮挡你的原图左侧大文字！且通过 flex-col-reverse 保证 F1 在下 */}
-              <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 flex flex-col-reverse gap-3 z-30">
-                {section.floors.map((floor, idx) => (
-                  <button
-                    key={floor.level}
-                    onClick={() => setActiveFloorIndex(idx)}
-                    onMouseEnter={() => setHoveredFloorIndex(idx)}
-                    onMouseLeave={() => setHoveredFloorIndex(null)}
-                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center font-black font-sans text-base md:text-lg border cursor-pointer transition-all duration-300 backdrop-blur-md ${
-                      activeFloorIndex === idx 
-                        ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_20px_rgba(152,195,49,0.6)] scale-110' 
-                        : 'bg-black/80 border-zinc-700 text-zinc-400 hover:text-[#98C331] hover:border-[#98C331]/80 hover:bg-black'
-                    }`}
-                  >
-                    {floor.level}
-                  </button>
-                ))}
-              </div>
+            {/* 左侧：楼层电梯导航 */}
+            <div className="w-full md:w-[100px] flex flex-row md:flex-col-reverse justify-center items-center gap-4 p-4 md:py-8 bg-black/40 backdrop-blur-md border-b md:border-b-0 md:border-r border-zinc-800/50">
+              {section.floors.map((floor, idx) => (
+                <button
+                  key={floor.level}
+                  onClick={() => setActiveFloorIndex(idx)}
+                  className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center font-black font-sans text-lg border cursor-pointer transition-all duration-300 rounded-sm ${
+                    activeFloorIndex === idx 
+                      ? 'bg-[#98C331] border-[#98C331] text-black shadow-[0_0_20px_rgba(152,195,49,0.6)] md:translate-x-2' 
+                      : 'bg-black/60 border-zinc-700 text-zinc-400 hover:text-[#98C331] hover:border-[#98C331]/80 hover:bg-black/80'
+                  }`}
+                >
+                  {floor.level}
+                </button>
+              ))}
             </div>
 
-            {/* 右侧：楼层详细信息 & 渲染图横向滑动区域 */}
-            <div className="w-full md:w-1/2 flex flex-col bg-[#111] overflow-hidden">
+            {/* 右侧：楼层信息与渲染图集 */}
+            <div className="flex-1 flex flex-col bg-transparent overflow-hidden">
               
               {/* 顶部楼层信息头部 */}
-              <div className="p-6 md:p-8 border-b border-zinc-800 bg-gradient-to-r from-[#98C331]/10 to-transparent shrink-0">
+              <div className="p-6 md:p-8 bg-gradient-to-b from-black/80 to-transparent">
                 <div className="text-[#98C331] text-[10px] font-mono mb-2 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#98C331] animate-pulse"></span>
                     :/ ACTIVE_LAYER: {activeFloor.level}
                 </div>
-                <h3 className="text-xl md:text-2xl font-sans font-black text-white tracking-tight mb-4">
+                <h3 className="text-2xl md:text-3xl font-sans font-black text-white tracking-tight mb-4 drop-shadow-md">
                   {activeFloor.name}
                 </h3>
                 
                 {/* 功能标签 */}
                 <div className="flex flex-wrap gap-2 md:gap-3 mt-2">
                   {activeFloor.functions.map((func, i) => (
-                    <span key={i} className="pr-3 py-1 text-zinc-300 text-xs font-sans flex items-center gap-2 bg-[#050505] border border-zinc-800 rounded-full overflow-hidden transition-colors hover:border-[#98C331]/50 shadow-sm">
+                    <span key={i} className="pr-3 py-1 text-zinc-300 text-xs font-sans flex items-center gap-2 bg-black/60 backdrop-blur-sm border border-zinc-700 rounded-full overflow-hidden transition-colors hover:border-[#98C331]/50 shadow-sm">
                       <span className="w-6 h-6 flex items-center justify-center bg-[#98C331] text-[#050505] font-black text-[11px] shrink-0">
                         {i+1}
                       </span>
@@ -683,21 +670,21 @@
                 </div>
               </div>
 
-              {/* 底部横向渲染图集：改为 object-contain 保证完整显示不被裁切 */}
-              <div className="flex-1 w-full bg-[#050505] relative p-4 md:p-6 flex flex-col justify-center">
+              {/* 底部横向渲染图集 */}
+              <div className="flex-1 w-full relative p-4 md:p-6 flex flex-col justify-center">
                 <div className="flex overflow-x-auto gallery-scroll snap-x snap-mandatory gap-6 items-center pb-2 h-full">
                   {activeFloor.images.map((imgSrc, i) => (
-                    <div key={i} className="min-w-[90%] md:min-w-[85%] h-full flex-shrink-0 snap-center border border-zinc-800 relative group/img cursor-ew-resize bg-black flex items-center justify-center overflow-hidden p-2">
+                    <div key={i} className="min-w-[90%] md:min-w-[80%] h-full flex-shrink-0 snap-center border border-zinc-700/50 relative group/img cursor-ew-resize bg-black/80 backdrop-blur-md flex items-center justify-center overflow-hidden p-2 rounded-md shadow-2xl">
                       <img 
                         src={imgSrc} 
                         alt={`${activeFloor.level} Render ${i + 1}`} 
-                        className="w-full h-full object-contain opacity-90 group-hover/img:opacity-100 group-hover/img:scale-[1.02] transition-all duration-700"
+                        className="w-full h-full object-contain opacity-90 group-hover/img:opacity-100 group-hover/img:scale-[1.02] transition-all duration-700 drop-shadow-2xl"
                         onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
                       />
-                      <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600 bg-[#111]">
+                      <div className="absolute inset-0 hidden flex-col items-center justify-center text-[10px] font-mono text-zinc-600">
                         <span>[RENDER_MISSING: {activeFloor.level}_{i+1}]</span>
                       </div>
-                      <div className="absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 text-[10px] font-mono text-zinc-300 border border-zinc-700 backdrop-blur-sm">
+                      <div className="absolute bottom-4 left-4 bg-black/80 px-3 py-1.5 text-[10px] font-mono text-zinc-300 border border-zinc-700 backdrop-blur-sm rounded-sm">
                         {String(i + 1).padStart(2, '0')} / {String(activeFloor.images.length).padStart(2, '0')}
                       </div>
                     </div>
@@ -795,11 +782,11 @@
                 key={card.id} 
                 className="min-w-[85%] md:min-w-[40%] flex-shrink-0 snap-center flex flex-col bg-[#0a0a0a] border border-zinc-800 transition-all duration-500 ease-out cursor-ew-resize hover:border-[#98C331]/40 hover:shadow-[0_0_30px_rgba(152,195,49,0.15)] opacity-100 z-10"
               >
-                 <div className="w-full aspect-[16/9] relative overflow-hidden bg-black border-b border-zinc-800">
+                 <div className="w-full aspect-[16/9] relative overflow-hidden bg-black border-b border-zinc-800 group/img">
                    <img 
                       src={card.image} 
                       alt={card.title} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-105"
                       onError={(e) => { e.target.style.display='none'; }}
                    />
                  </div>
@@ -1526,9 +1513,12 @@
                         }
 
                         return (
-                          <CollapsibleSection key={section.id || idx} title={section.title} index={idx} hint={hint}>
+                          <div key={section.id || idx} className="mt-12 md:mt-24 w-full relative z-10">
+                            <div className="flex justify-between items-end border-b border-zinc-800 pb-2 mb-8">
+                              <div className="text-[10px] text-zinc-600 tracking-widest uppercase">:/ {String(idx + 1).padStart(2, '0')} - {section.title}</div>
+                            </div>
                             {content}
-                          </CollapsibleSection>
+                          </div>
                         );
                       })}
                     </div>
